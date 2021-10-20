@@ -1,0 +1,38 @@
+{
+  "name": "Form",
+  "fields": [
+    {
+      "fieldName": "formName",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "questions",
+      "otherEntityRelationshipName": "form",
+      "relationshipName": "questions"
+    },
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "formAnswer",
+      "otherEntityRelationshipName": "form",
+      "relationshipName": "formAnswer"
+    }
+  ],
+  "entityTableName": "form",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": ["preventiveformapp"],
+  "changelogDate": "20211019160220"
+}

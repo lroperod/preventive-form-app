@@ -1,0 +1,51 @@
+<div>
+  <h2>
+    <span id="metrics-page-heading" pfaTranslate="metrics.title" data-cy="metricsPageHeading">Application Metrics</span>
+
+    <button class="btn btn-primary float-right" (click)="refresh()">
+      <fa-icon icon="sync"></fa-icon> <span pfaTranslate="metrics.refresh.button">Refresh</span>
+    </button>
+  </h2>
+
+  <h3 pfaTranslate="metrics.jvm.title">JVM Metrics</h3>
+
+  <div class="row" *ngIf="metrics && !updatingMetrics">
+    <pfa-jvm-memory class="col-md-4" [updating]="updatingMetrics" [jvmMemoryMetrics]="metrics.jvm"></pfa-jvm-memory>
+
+    <pfa-jvm-threads class="col-md-4" [threads]="threads"></pfa-jvm-threads>
+
+    <pfa-metrics-system class="col-md-4" [updating]="updatingMetrics" [systemMetrics]="metrics.processMetrics"></pfa-metrics-system>
+  </div>
+
+  <pfa-metrics-garbagecollector
+    *ngIf="metrics && metricsKeyExists('garbageCollector')"
+    [updating]="updatingMetrics"
+    [garbageCollectorMetrics]="metrics.garbageCollector"
+  ></pfa-metrics-garbagecollector>
+
+  <div class="well well-lg" *ngIf="updatingMetrics" pfaTranslate="metrics.updating">Updating...</div>
+
+  <pfa-metrics-request
+    *ngIf="metrics && metricsKeyExists('http.server.requests')"
+    [updating]="updatingMetrics"
+    [requestMetrics]="metrics['http.server.requests']"
+  ></pfa-metrics-request>
+
+  <pfa-metrics-endpoints-requests
+    *ngIf="metrics && metricsKeyExists('services')"
+    [updating]="updatingMetrics"
+    [endpointsRequestsMetrics]="metrics.services"
+  ></pfa-metrics-endpoints-requests>
+
+  <pfa-metrics-cache
+    *ngIf="metrics && metricsKeyExists('cache')"
+    [updating]="updatingMetrics"
+    [cacheMetrics]="metrics.cache"
+  ></pfa-metrics-cache>
+
+  <pfa-metrics-datasource
+    *ngIf="metrics && metricsKeyExistsAndObjectNotEmpty('databases')"
+    [updating]="updatingMetrics"
+    [datasourceMetrics]="metrics.databases"
+  ></pfa-metrics-datasource>
+</div>

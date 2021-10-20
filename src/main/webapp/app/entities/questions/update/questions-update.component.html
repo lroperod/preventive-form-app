@@ -1,0 +1,133 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2
+        id="pfa-questions-heading"
+        data-cy="QuestionsCreateUpdateHeading"
+        pfaTranslate="preventiveformappApp.questions.home.createOrEditLabel"
+      >
+        Create or edit a Questions
+      </h2>
+
+      <div>
+        <pfa-alert-error></pfa-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" pfaTranslate="global.field.id" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" pfaTranslate="preventiveformappApp.questions.questionCode" for="field_questionCode"
+            >Question Code</label
+          >
+          <input
+            type="text"
+            class="form-control"
+            name="questionCode"
+            id="field_questionCode"
+            data-cy="questionCode"
+            formControlName="questionCode"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" pfaTranslate="preventiveformappApp.questions.questionText" for="field_questionText"
+            >Question Text</label
+          >
+          <input
+            type="text"
+            class="form-control"
+            name="questionText"
+            id="field_questionText"
+            data-cy="questionText"
+            formControlName="questionText"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" pfaTranslate="preventiveformappApp.questions.questionType" for="field_questionType"
+            >Question Type</label
+          >
+          <select class="form-control" name="questionType" formControlName="questionType" id="field_questionType" data-cy="questionType">
+            <option [ngValue]="null">{{ 'preventiveformappApp.QuestionType.null' | translate }}</option>
+            <option value="TEXT">{{ 'preventiveformappApp.QuestionType.TEXT' | translate }}</option>
+            <option value="NUMBER">{{ 'preventiveformappApp.QuestionType.NUMBER' | translate }}</option>
+            <option value="DATE">{{ 'preventiveformappApp.QuestionType.DATE' | translate }}</option>
+            <option value="UNIQUE_RESPONSE">{{ 'preventiveformappApp.QuestionType.UNIQUE_RESPONSE' | translate }}</option>
+            <option value="MULTIPLE_RESPONSE">{{ 'preventiveformappApp.QuestionType.MULTIPLE_RESPONSE' | translate }}</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" pfaTranslate="preventiveformappApp.questions.question" for="field_question">Question</label>
+          <select class="form-control" id="field_question" data-cy="question" name="question" formControlName="question">
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                questionAnswerOption.id === editForm.get('question')!.value?.id ? editForm.get('question')!.value : questionAnswerOption
+              "
+              *ngFor="let questionAnswerOption of questionsCollection; trackBy: trackQuestionAnswerById"
+            >
+              {{ questionAnswerOption.id }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" pfaTranslate="preventiveformappApp.questions.form" for="field_form">Form</label>
+          <select class="form-control" id="field_form" data-cy="form" name="form" formControlName="form">
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="formOption.id === editForm.get('form')!.value?.id ? editForm.get('form')!.value : formOption"
+              *ngFor="let formOption of formsSharedCollection; trackBy: trackFormById"
+            >
+              {{ formOption.id }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" pfaTranslate="preventiveformappApp.questions.questionOption" for="field_questionOption"
+            >Question Option</label
+          >
+          <select
+            class="form-control"
+            id="field_questionOption"
+            data-cy="questionOption"
+            name="questionOption"
+            formControlName="questionOption"
+          >
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                questionOptionOption.id === editForm.get('questionOption')!.value?.id
+                  ? editForm.get('questionOption')!.value
+                  : questionOptionOption
+              "
+              *ngFor="let questionOptionOption of questionOptionsSharedCollection; trackBy: trackQuestionOptionById"
+            >
+              {{ questionOptionOption.id }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span pfaTranslate="entity.action.cancel">Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span pfaTranslate="entity.action.save">Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

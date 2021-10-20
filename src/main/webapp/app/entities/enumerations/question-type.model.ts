@@ -1,0 +1,11 @@
+export enum QuestionType {
+  TEXT = 'TEXT',
+
+  NUMBER = 'NUMBER',
+
+  DATE = 'DATE',
+
+  UNIQUE_RESPONSE = 'UNIQUE_RESPONSE',
+
+  MULTIPLE_RESPONSE = 'MULTIPLE_RESPONSE',
+}

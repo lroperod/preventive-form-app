@@ -1,0 +1,27 @@
+{
+  "preventiveformappApp": {
+    "formAnswer": {
+      "home": {
+        "title": "Form Answers",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Form Answer",
+        "createOrEditLabel": "Create or edit a Form Answer",
+        "notFound": "No Form Answers found"
+      },
+      "created": "A new Form Answer is created with identifier {{ param }}",
+      "updated": "A Form Answer is updated with identifier {{ param }}",
+      "deleted": "A Form Answer is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Form Answer {{ id }}?"
+      },
+      "detail": {
+        "title": "Form Answer"
+      },
+      "id": "ID",
+      "formAnswerLocalDate": "Form Answer Local Date",
+      "user": "User",
+      "questionAnswer": "Question Answer",
+      "form": "Form"
+    }
+  }
+}
