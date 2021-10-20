@@ -14,14 +14,15 @@
     {
       "relationshipType": "many-to-one",
       "otherEntityName": "questions",
-      "otherEntityRelationshipName": "questionOption",
-      "relationshipName": "questions"
+      "otherEntityRelationshipName": "questions",
+      "relationshipName": "questions",
+      "otherEntityField": "questionText"
     }
   ],
   "entityTableName": "question_option",
-  "dto": "no",
-  "pagination": "no",
-  "service": "no",
+  "dto": "mapstruct",
+  "pagination": "pagination",
+  "service": "serviceClass",
   "jpaMetamodelFiltering": false,
   "fluentMethods": true,
   "readOnly": false,

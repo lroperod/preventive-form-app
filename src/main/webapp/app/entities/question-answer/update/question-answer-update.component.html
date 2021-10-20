@@ -46,12 +46,14 @@
         </div>
 
         <div class="form-group">
-          <label class="form-control-label" pfaTranslate="preventiveformappApp.questionAnswer.answer" for="field_answer">Answer</label>
-          <select class="form-control" id="field_answer" data-cy="answer" name="answer" formControlName="answer">
+          <label class="form-control-label" pfaTranslate="preventiveformappApp.questionAnswer.questions" for="field_questions"
+            >Questions</label
+          >
+          <select class="form-control" id="field_questions" data-cy="questions" name="questions" formControlName="questions">
             <option [ngValue]="null"></option>
             <option
-              [ngValue]="questionsOption.id === editForm.get('answer')!.value?.id ? editForm.get('answer')!.value : questionsOption"
-              *ngFor="let questionsOption of answersCollection; trackBy: trackQuestionsById"
+              [ngValue]="questionsOption.id === editForm.get('questions')!.value?.id ? editForm.get('questions')!.value : questionsOption"
+              *ngFor="let questionsOption of questionsCollection; trackBy: trackQuestionsById"
             >
               {{ questionsOption.id }}
             </option>

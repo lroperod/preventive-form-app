@@ -25,7 +25,7 @@ export class FormAnswerUpdateComponent implements OnInit {
   editForm = this.fb.group({
     id: [],
     formAnswerLocalDate: [],
-    user: [],
+    users: [],
     form: [],
   });
 
@@ -67,6 +67,17 @@ export class FormAnswerUpdateComponent implements OnInit {
     return item.id!;
   }
 
+  getSelectedUser(option: IUser, selectedVals?: IUser[]): IUser {
+    if (selectedVals) {
+      for (const selectedVal of selectedVals) {
+        if (option.id === selectedVal.id) {
+          return selectedVal;
+        }
+      }
+    }
+    return option;
+  }
+
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IFormAnswer>>): void {
     result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
       () => this.onSaveSuccess(),
@@ -90,11 +101,11 @@ export class FormAnswerUpdateComponent implements OnInit {
     this.editForm.patchValue({
       id: formAnswer.id,
       formAnswerLocalDate: formAnswer.formAnswerLocalDate,
-      user: formAnswer.user,
+      users: formAnswer.users,
       form: formAnswer.form,
     });
 
-    this.usersSharedCollection = this.userService.addUserToCollectionIfMissing(this.usersSharedCollection, formAnswer.user);
+    this.usersSharedCollection = this.userService.addUserToCollectionIfMissing(this.usersSharedCollection, ...(formAnswer.users ?? []));
     this.formsSharedCollection = this.formService.addFormToCollectionIfMissing(this.formsSharedCollection, formAnswer.form);
   }
 
@@ -102,7 +113,7 @@ export class FormAnswerUpdateComponent implements OnInit {
     this.userService
       .query()
       .pipe(map((res: HttpResponse<IUser[]>) => res.body ?? []))
-      .pipe(map((users: IUser[]) => this.userService.addUserToCollectionIfMissing(users, this.editForm.get('user')!.value)))
+      .pipe(map((users: IUser[]) => this.userService.addUserToCollectionIfMissing(users, ...(this.editForm.get('users')!.value ?? []))))
       .subscribe((users: IUser[]) => (this.usersSharedCollection = users));
 
     this.formService
@@ -117,7 +128,7 @@ export class FormAnswerUpdateComponent implements OnInit {
       ...new FormAnswer(),
       id: this.editForm.get(['id'])!.value,
       formAnswerLocalDate: this.editForm.get(['formAnswerLocalDate'])!.value,
-      user: this.editForm.get(['user'])!.value,
+      users: this.editForm.get(['users'])!.value,
       form: this.editForm.get(['form'])!.value,
     };
   }

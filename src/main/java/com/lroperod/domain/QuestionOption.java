@@ -29,7 +29,7 @@ public class QuestionOption implements Serializable {
     private String questionOptionsText;
 
     @ManyToOne
-    @JsonIgnoreProperties(value = { "form" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "questions", "questionAnswer", "form" }, allowSetters = true)
     private Questions questions;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

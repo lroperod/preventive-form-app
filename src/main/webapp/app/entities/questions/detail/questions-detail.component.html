@@ -29,7 +29,7 @@
         <dt><span pfaTranslate="preventiveformappApp.questions.form">Form</span></dt>
         <dd>
           <div *ngIf="questions.form">
-            <a [routerLink]="['/form', questions.form?.id, 'view']">{{ questions.form?.id }}</a>
+            <a [routerLink]="['/form', questions.form?.id, 'view']">{{ questions.form?.formName }}</a>
           </div>
         </dd>
       </dl>

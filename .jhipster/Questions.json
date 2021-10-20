@@ -17,16 +17,30 @@
   ],
   "relationships": [
     {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "questionOption",
+      "otherEntityRelationshipName": "questions",
+      "relationshipName": "questions"
+    },
+    {
+      "relationshipType": "one-to-one",
+      "otherEntityName": "questionAnswer",
+      "otherEntityRelationshipName": "questions",
+      "relationshipName": "questionAnswer",
+      "ownerSide": false
+    },
+    {
       "relationshipType": "many-to-one",
       "otherEntityName": "form",
       "otherEntityRelationshipName": "questions",
-      "relationshipName": "form"
+      "relationshipName": "form",
+      "otherEntityField": "formName"
     }
   ],
   "entityTableName": "questions",
-  "dto": "no",
-  "pagination": "no",
-  "service": "no",
+  "dto": "mapstruct",
+  "pagination": "pagination",
+  "service": "serviceClass",
   "jpaMetamodelFiltering": false,
   "fluentMethods": true,
   "readOnly": false,

@@ -52,10 +52,12 @@ public class CacheConfiguration {
             createCache(cm, com.lroperod.domain.Form.class.getName() + ".questions");
             createCache(cm, com.lroperod.domain.Form.class.getName() + ".formAnswers");
             createCache(cm, com.lroperod.domain.Questions.class.getName());
+            createCache(cm, com.lroperod.domain.Questions.class.getName() + ".questions");
             createCache(cm, com.lroperod.domain.QuestionOption.class.getName());
             createCache(cm, com.lroperod.domain.QuestionAnswer.class.getName());
             createCache(cm, com.lroperod.domain.FormAnswer.class.getName());
             createCache(cm, com.lroperod.domain.FormAnswer.class.getName() + ".questionAnswers");
+            createCache(cm, com.lroperod.domain.FormAnswer.class.getName() + ".users");
             // jhipster-needle-ehcache-add-entry
         };
     }

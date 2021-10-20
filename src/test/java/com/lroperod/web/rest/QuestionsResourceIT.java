@@ -9,6 +9,8 @@ import com.lroperod.IntegrationTest;
 import com.lroperod.domain.Questions;
 import com.lroperod.domain.enumeration.QuestionType;
 import com.lroperod.repository.QuestionsRepository;
+import com.lroperod.service.dto.QuestionsDTO;
+import com.lroperod.service.mapper.QuestionsMapper;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
@@ -47,6 +49,9 @@ class QuestionsResourceIT {
 
     @Autowired
     private QuestionsRepository questionsRepository;
+
+    @Autowired
+    private QuestionsMapper questionsMapper;
 
     @Autowired
     private EntityManager em;
@@ -94,8 +99,9 @@ class QuestionsResourceIT {
     void createQuestions() throws Exception {
         int databaseSizeBeforeCreate = questionsRepository.findAll().size();
         // Create the Questions
+        QuestionsDTO questionsDTO = questionsMapper.toDto(questions);
         restQuestionsMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(questions)))
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(questionsDTO)))
             .andExpect(status().isCreated());
 
         // Validate the Questions in the database
@@ -112,12 +118,13 @@ class QuestionsResourceIT {
     void createQuestionsWithExistingId() throws Exception {
         // Create the Questions with an existing ID
         questions.setId(1L);
+        QuestionsDTO questionsDTO = questionsMapper.toDto(questions);
 
         int databaseSizeBeforeCreate = questionsRepository.findAll().size();
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restQuestionsMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(questions)))
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(questionsDTO)))
             .andExpect(status().isBadRequest());
 
         // Validate the Questions in the database
@@ -179,12 +186,13 @@ class QuestionsResourceIT {
         // Disconnect from session so that the updates on updatedQuestions are not directly saved in db
         em.detach(updatedQuestions);
         updatedQuestions.questionCode(UPDATED_QUESTION_CODE).questionText(UPDATED_QUESTION_TEXT).questionType(UPDATED_QUESTION_TYPE);
+        QuestionsDTO questionsDTO = questionsMapper.toDto(updatedQuestions);
 
         restQuestionsMockMvc
             .perform(
-                put(ENTITY_API_URL_ID, updatedQuestions.getId())
+                put(ENTITY_API_URL_ID, questionsDTO.getId())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(updatedQuestions))
+                    .content(TestUtil.convertObjectToJsonBytes(questionsDTO))
             )
             .andExpect(status().isOk());
 
@@ -203,12 +211,15 @@ class QuestionsResourceIT {
         int databaseSizeBeforeUpdate = questionsRepository.findAll().size();
         questions.setId(count.incrementAndGet());
 
+        // Create the Questions
+        QuestionsDTO questionsDTO = questionsMapper.toDto(questions);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restQuestionsMockMvc
             .perform(
-                put(ENTITY_API_URL_ID, questions.getId())
+                put(ENTITY_API_URL_ID, questionsDTO.getId())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(questions))
+                    .content(TestUtil.convertObjectToJsonBytes(questionsDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -223,12 +234,15 @@ class QuestionsResourceIT {
         int databaseSizeBeforeUpdate = questionsRepository.findAll().size();
         questions.setId(count.incrementAndGet());
 
+        // Create the Questions
+        QuestionsDTO questionsDTO = questionsMapper.toDto(questions);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restQuestionsMockMvc
             .perform(
                 put(ENTITY_API_URL_ID, count.incrementAndGet())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(questions))
+                    .content(TestUtil.convertObjectToJsonBytes(questionsDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -243,9 +257,12 @@ class QuestionsResourceIT {
         int databaseSizeBeforeUpdate = questionsRepository.findAll().size();
         questions.setId(count.incrementAndGet());
 
+        // Create the Questions
+        QuestionsDTO questionsDTO = questionsMapper.toDto(questions);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restQuestionsMockMvc
-            .perform(put(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(questions)))
+            .perform(put(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(questionsDTO)))
             .andExpect(status().isMethodNotAllowed());
 
         // Validate the Questions in the database
@@ -321,12 +338,15 @@ class QuestionsResourceIT {
         int databaseSizeBeforeUpdate = questionsRepository.findAll().size();
         questions.setId(count.incrementAndGet());
 
+        // Create the Questions
+        QuestionsDTO questionsDTO = questionsMapper.toDto(questions);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restQuestionsMockMvc
             .perform(
-                patch(ENTITY_API_URL_ID, questions.getId())
+                patch(ENTITY_API_URL_ID, questionsDTO.getId())
                     .contentType("application/merge-patch+json")
-                    .content(TestUtil.convertObjectToJsonBytes(questions))
+                    .content(TestUtil.convertObjectToJsonBytes(questionsDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -341,12 +361,15 @@ class QuestionsResourceIT {
         int databaseSizeBeforeUpdate = questionsRepository.findAll().size();
         questions.setId(count.incrementAndGet());
 
+        // Create the Questions
+        QuestionsDTO questionsDTO = questionsMapper.toDto(questions);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restQuestionsMockMvc
             .perform(
                 patch(ENTITY_API_URL_ID, count.incrementAndGet())
                     .contentType("application/merge-patch+json")
-                    .content(TestUtil.convertObjectToJsonBytes(questions))
+                    .content(TestUtil.convertObjectToJsonBytes(questionsDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -361,10 +384,13 @@ class QuestionsResourceIT {
         int databaseSizeBeforeUpdate = questionsRepository.findAll().size();
         questions.setId(count.incrementAndGet());
 
+        // Create the Questions
+        QuestionsDTO questionsDTO = questionsMapper.toDto(questions);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restQuestionsMockMvc
             .perform(
-                patch(ENTITY_API_URL).contentType("application/merge-patch+json").content(TestUtil.convertObjectToJsonBytes(questions))
+                patch(ENTITY_API_URL).contentType("application/merge-patch+json").content(TestUtil.convertObjectToJsonBytes(questionsDTO))
             )
             .andExpect(status().isMethodNotAllowed());
 

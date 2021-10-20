@@ -21,6 +21,8 @@
       "questionCode": "Question Code",
       "questionText": "Question Text",
       "questionType": "Question Type",
+      "questions": "Questions",
+      "questionAnswer": "Question Answer",
       "form": "Form"
     }
   }

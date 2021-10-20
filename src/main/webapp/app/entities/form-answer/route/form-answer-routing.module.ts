@@ -11,6 +11,9 @@ const formAnswerRoute: Routes = [
   {
     path: '',
     component: FormAnswerComponent,
+    data: {
+      defaultSort: 'id,asc',
+    },
     canActivate: [UserRouteAccessService],
   },
   {

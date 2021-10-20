@@ -11,6 +11,9 @@ const formRoute: Routes = [
   {
     path: '',
     component: FormComponent,
+    data: {
+      defaultSort: 'id,asc',
+    },
     canActivate: [UserRouteAccessService],
   },
   {

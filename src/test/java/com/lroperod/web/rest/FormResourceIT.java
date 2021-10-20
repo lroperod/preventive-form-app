@@ -8,6 +8,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.lroperod.IntegrationTest;
 import com.lroperod.domain.Form;
 import com.lroperod.repository.FormRepository;
+import com.lroperod.service.dto.FormDTO;
+import com.lroperod.service.mapper.FormMapper;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
@@ -43,6 +45,9 @@ class FormResourceIT {
 
     @Autowired
     private FormRepository formRepository;
+
+    @Autowired
+    private FormMapper formMapper;
 
     @Autowired
     private EntityManager em;
@@ -84,8 +89,9 @@ class FormResourceIT {
     void createForm() throws Exception {
         int databaseSizeBeforeCreate = formRepository.findAll().size();
         // Create the Form
+        FormDTO formDTO = formMapper.toDto(form);
         restFormMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(form)))
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(formDTO)))
             .andExpect(status().isCreated());
 
         // Validate the Form in the database
@@ -101,12 +107,13 @@ class FormResourceIT {
     void createFormWithExistingId() throws Exception {
         // Create the Form with an existing ID
         form.setId(1L);
+        FormDTO formDTO = formMapper.toDto(form);
 
         int databaseSizeBeforeCreate = formRepository.findAll().size();
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restFormMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(form)))
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(formDTO)))
             .andExpect(status().isBadRequest());
 
         // Validate the Form in the database
@@ -122,9 +129,10 @@ class FormResourceIT {
         form.setFormName(null);
 
         // Create the Form, which fails.
+        FormDTO formDTO = formMapper.toDto(form);
 
         restFormMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(form)))
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(formDTO)))
             .andExpect(status().isBadRequest());
 
         List<Form> formList = formRepository.findAll();
@@ -183,12 +191,13 @@ class FormResourceIT {
         // Disconnect from session so that the updates on updatedForm are not directly saved in db
         em.detach(updatedForm);
         updatedForm.formName(UPDATED_FORM_NAME).description(UPDATED_DESCRIPTION);
+        FormDTO formDTO = formMapper.toDto(updatedForm);
 
         restFormMockMvc
             .perform(
-                put(ENTITY_API_URL_ID, updatedForm.getId())
+                put(ENTITY_API_URL_ID, formDTO.getId())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(updatedForm))
+                    .content(TestUtil.convertObjectToJsonBytes(formDTO))
             )
             .andExpect(status().isOk());
 
@@ -206,12 +215,15 @@ class FormResourceIT {
         int databaseSizeBeforeUpdate = formRepository.findAll().size();
         form.setId(count.incrementAndGet());
 
+        // Create the Form
+        FormDTO formDTO = formMapper.toDto(form);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restFormMockMvc
             .perform(
-                put(ENTITY_API_URL_ID, form.getId())
+                put(ENTITY_API_URL_ID, formDTO.getId())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(form))
+                    .content(TestUtil.convertObjectToJsonBytes(formDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -226,12 +238,15 @@ class FormResourceIT {
         int databaseSizeBeforeUpdate = formRepository.findAll().size();
         form.setId(count.incrementAndGet());
 
+        // Create the Form
+        FormDTO formDTO = formMapper.toDto(form);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restFormMockMvc
             .perform(
                 put(ENTITY_API_URL_ID, count.incrementAndGet())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(form))
+                    .content(TestUtil.convertObjectToJsonBytes(formDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -246,9 +261,12 @@ class FormResourceIT {
         int databaseSizeBeforeUpdate = formRepository.findAll().size();
         form.setId(count.incrementAndGet());
 
+        // Create the Form
+        FormDTO formDTO = formMapper.toDto(form);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restFormMockMvc
-            .perform(put(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(form)))
+            .perform(put(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(formDTO)))
             .andExpect(status().isMethodNotAllowed());
 
         // Validate the Form in the database
@@ -322,12 +340,15 @@ class FormResourceIT {
         int databaseSizeBeforeUpdate = formRepository.findAll().size();
         form.setId(count.incrementAndGet());
 
+        // Create the Form
+        FormDTO formDTO = formMapper.toDto(form);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restFormMockMvc
             .perform(
-                patch(ENTITY_API_URL_ID, form.getId())
+                patch(ENTITY_API_URL_ID, formDTO.getId())
                     .contentType("application/merge-patch+json")
-                    .content(TestUtil.convertObjectToJsonBytes(form))
+                    .content(TestUtil.convertObjectToJsonBytes(formDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -342,12 +363,15 @@ class FormResourceIT {
         int databaseSizeBeforeUpdate = formRepository.findAll().size();
         form.setId(count.incrementAndGet());
 
+        // Create the Form
+        FormDTO formDTO = formMapper.toDto(form);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restFormMockMvc
             .perform(
                 patch(ENTITY_API_URL_ID, count.incrementAndGet())
                     .contentType("application/merge-patch+json")
-                    .content(TestUtil.convertObjectToJsonBytes(form))
+                    .content(TestUtil.convertObjectToJsonBytes(formDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -362,9 +386,12 @@ class FormResourceIT {
         int databaseSizeBeforeUpdate = formRepository.findAll().size();
         form.setId(count.incrementAndGet());
 
+        // Create the Form
+        FormDTO formDTO = formMapper.toDto(form);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restFormMockMvc
-            .perform(patch(ENTITY_API_URL).contentType("application/merge-patch+json").content(TestUtil.convertObjectToJsonBytes(form)))
+            .perform(patch(ENTITY_API_URL).contentType("application/merge-patch+json").content(TestUtil.convertObjectToJsonBytes(formDTO)))
             .andExpect(status().isMethodNotAllowed());
 
         // Validate the Form in the database

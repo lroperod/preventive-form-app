@@ -20,8 +20,8 @@
             <column name="answer_text" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="answer_id" type="bigint">
-                <constraints nullable="true" unique="true" uniqueConstraintName="ux_question_answer__answer_id" />
+            <column name="questions_id" type="bigint">
+                <constraints nullable="true" unique="true" uniqueConstraintName="ux_question_answer__questions_id" />
             </column>
             <column name="form_answer_id" type="bigint">
                 <constraints nullable="true" />

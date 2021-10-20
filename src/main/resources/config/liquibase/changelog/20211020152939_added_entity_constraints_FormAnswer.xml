@@ -8,9 +8,15 @@
     -->
     <changeSet id="20211020152939-2" author="jhipster">
 
+        <addForeignKeyConstraint baseColumnNames="form_answer_id"
+                                 baseTableName="rel_form_answer__user"
+                                 constraintName="fk_rel_form_answer__user__form_answer_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="form_answer"/>
+
         <addForeignKeyConstraint baseColumnNames="user_id"
-                                 baseTableName="form_answer"
-                                 constraintName="fk_form_answer__user_id"
+                                 baseTableName="rel_form_answer__user"
+                                 constraintName="fk_rel_form_answer__user__user_id"
                                  referencedColumnNames="id"
                                  referencedTableName="pfa_user"/>
 

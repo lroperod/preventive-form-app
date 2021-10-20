@@ -20,12 +20,12 @@
         </dd>
         <dt><span pfaTranslate="preventiveformappApp.formAnswer.user">User</span></dt>
         <dd>
-          <span>{{ formAnswer.user?.id }}</span>
+          <span *ngFor="let user of formAnswer.users; let last = last"> {{ user.login }}{{ last ? '' : ', ' }} </span>
         </dd>
         <dt><span pfaTranslate="preventiveformappApp.formAnswer.form">Form</span></dt>
         <dd>
           <div *ngIf="formAnswer.form">
-            <a [routerLink]="['/form', formAnswer.form?.id, 'view']">{{ formAnswer.form?.id }}</a>
+            <a [routerLink]="['/form', formAnswer.form?.id, 'view']">{{ formAnswer.form?.formName }}</a>
           </div>
         </dd>
       </dl>

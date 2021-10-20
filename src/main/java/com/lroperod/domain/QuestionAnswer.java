@@ -28,13 +28,13 @@ public class QuestionAnswer implements Serializable {
     @Column(name = "answer_text")
     private String answerText;
 
-    @JsonIgnoreProperties(value = { "form" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "questions", "questionAnswer", "form" }, allowSetters = true)
     @OneToOne
     @JoinColumn(unique = true)
-    private Questions answer;
+    private Questions questions;
 
     @ManyToOne
-    @JsonIgnoreProperties(value = { "user", "questionAnswers", "form" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "questionAnswers", "users", "form" }, allowSetters = true)
     private FormAnswer formAnswer;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
@@ -78,16 +78,16 @@ public class QuestionAnswer implements Serializable {
         this.answerText = answerText;
     }
 
-    public Questions getAnswer() {
-        return this.answer;
+    public Questions getQuestions() {
+        return this.questions;
     }
 
-    public void setAnswer(Questions questions) {
-        this.answer = questions;
+    public void setQuestions(Questions questions) {
+        this.questions = questions;
     }
 
-    public QuestionAnswer answer(Questions questions) {
-        this.setAnswer(questions);
+    public QuestionAnswer questions(Questions questions) {
+        this.setQuestions(questions);
         return this;
     }
 

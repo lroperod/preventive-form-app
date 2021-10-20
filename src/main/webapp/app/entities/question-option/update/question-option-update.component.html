@@ -61,7 +61,7 @@
               [ngValue]="questionsOption.id === editForm.get('questions')!.value?.id ? editForm.get('questions')!.value : questionsOption"
               *ngFor="let questionsOption of questionsSharedCollection; trackBy: trackQuestionsById"
             >
-              {{ questionsOption.id }}
+              {{ questionsOption.questionText }}
             </option>
           </select>
         </div>

@@ -3,6 +3,8 @@ package com.lroperod.domain;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.lroperod.domain.enumeration.QuestionType;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -32,6 +34,15 @@ public class Questions implements Serializable {
     @Enumerated(EnumType.STRING)
     @Column(name = "question_type")
     private QuestionType questionType;
+
+    @OneToMany(mappedBy = "questions")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "questions" }, allowSetters = true)
+    private Set<QuestionOption> questions = new HashSet<>();
+
+    @JsonIgnoreProperties(value = { "questions", "formAnswer" }, allowSetters = true)
+    @OneToOne(mappedBy = "questions")
+    private QuestionAnswer questionAnswer;
 
     @ManyToOne
     @JsonIgnoreProperties(value = { "questions", "formAnswers" }, allowSetters = true)
@@ -89,6 +100,56 @@ public class Questions implements Serializable {
 
     public void setQuestionType(QuestionType questionType) {
         this.questionType = questionType;
+    }
+
+    public Set<QuestionOption> getQuestions() {
+        return this.questions;
+    }
+
+    public void setQuestions(Set<QuestionOption> questionOptions) {
+        if (this.questions != null) {
+            this.questions.forEach(i -> i.setQuestions(null));
+        }
+        if (questionOptions != null) {
+            questionOptions.forEach(i -> i.setQuestions(this));
+        }
+        this.questions = questionOptions;
+    }
+
+    public Questions questions(Set<QuestionOption> questionOptions) {
+        this.setQuestions(questionOptions);
+        return this;
+    }
+
+    public Questions addQuestions(QuestionOption questionOption) {
+        this.questions.add(questionOption);
+        questionOption.setQuestions(this);
+        return this;
+    }
+
+    public Questions removeQuestions(QuestionOption questionOption) {
+        this.questions.remove(questionOption);
+        questionOption.setQuestions(null);
+        return this;
+    }
+
+    public QuestionAnswer getQuestionAnswer() {
+        return this.questionAnswer;
+    }
+
+    public void setQuestionAnswer(QuestionAnswer questionAnswer) {
+        if (this.questionAnswer != null) {
+            this.questionAnswer.setQuestions(null);
+        }
+        if (questionAnswer != null) {
+            questionAnswer.setQuestions(this);
+        }
+        this.questionAnswer = questionAnswer;
+    }
+
+    public Questions questionAnswer(QuestionAnswer questionAnswer) {
+        this.setQuestionAnswer(questionAnswer);
+        return this;
     }
 
     public Form getForm() {

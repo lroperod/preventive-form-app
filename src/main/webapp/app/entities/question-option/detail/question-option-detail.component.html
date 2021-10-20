@@ -27,7 +27,7 @@
         <dt><span pfaTranslate="preventiveformappApp.questionOption.questions">Questions</span></dt>
         <dd>
           <div *ngIf="questionOption.questions">
-            <a [routerLink]="['/questions', questionOption.questions?.id, 'view']">{{ questionOption.questions?.id }}</a>
+            <a [routerLink]="['/questions', questionOption.questions?.id, 'view']">{{ questionOption.questions?.questionText }}</a>
           </div>
         </dd>
       </dl>

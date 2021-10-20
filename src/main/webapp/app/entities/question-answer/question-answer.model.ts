@@ -5,7 +5,7 @@ export interface IQuestionAnswer {
   id?: number;
   answerCode?: string | null;
   answerText?: string | null;
-  answer?: IQuestions | null;
+  questions?: IQuestions | null;
   formAnswer?: IFormAnswer | null;
 }
 
@@ -14,7 +14,7 @@ export class QuestionAnswer implements IQuestionAnswer {
     public id?: number,
     public answerCode?: string | null,
     public answerText?: string | null,
-    public answer?: IQuestions | null,
+    public questions?: IQuestions | null,
     public formAnswer?: IFormAnswer | null
   ) {}
 }

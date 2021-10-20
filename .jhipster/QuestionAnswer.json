@@ -15,7 +15,7 @@
       "relationshipType": "one-to-one",
       "otherEntityName": "questions",
       "otherEntityRelationshipName": "questionAnswer",
-      "relationshipName": "answer",
+      "relationshipName": "questions",
       "ownerSide": true
     },
     {
@@ -26,9 +26,9 @@
     }
   ],
   "entityTableName": "question_answer",
-  "dto": "no",
-  "pagination": "no",
-  "service": "no",
+  "dto": "mapstruct",
+  "pagination": "pagination",
+  "service": "serviceClass",
   "jpaMetamodelFiltering": false,
   "fluentMethods": true,
   "readOnly": false,

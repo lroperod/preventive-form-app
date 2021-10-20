@@ -28,14 +28,19 @@ public class FormAnswer implements Serializable {
     @Column(name = "form_answer_local_date")
     private LocalDate formAnswerLocalDate;
 
-    @OneToOne
-    @JoinColumn(unique = true)
-    private User user;
-
     @OneToMany(mappedBy = "formAnswer")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "answer", "formAnswer" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "questions", "formAnswer" }, allowSetters = true)
     private Set<QuestionAnswer> questionAnswers = new HashSet<>();
+
+    @ManyToMany
+    @JoinTable(
+        name = "rel_form_answer__user",
+        joinColumns = @JoinColumn(name = "form_answer_id"),
+        inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    private Set<User> users = new HashSet<>();
 
     @ManyToOne
     @JsonIgnoreProperties(value = { "questions", "formAnswers" }, allowSetters = true)
@@ -69,19 +74,6 @@ public class FormAnswer implements Serializable {
         this.formAnswerLocalDate = formAnswerLocalDate;
     }
 
-    public User getUser() {
-        return this.user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public FormAnswer user(User user) {
-        this.setUser(user);
-        return this;
-    }
-
     public Set<QuestionAnswer> getQuestionAnswers() {
         return this.questionAnswers;
     }
@@ -110,6 +102,29 @@ public class FormAnswer implements Serializable {
     public FormAnswer removeQuestionAnswer(QuestionAnswer questionAnswer) {
         this.questionAnswers.remove(questionAnswer);
         questionAnswer.setFormAnswer(null);
+        return this;
+    }
+
+    public Set<User> getUsers() {
+        return this.users;
+    }
+
+    public void setUsers(Set<User> users) {
+        this.users = users;
+    }
+
+    public FormAnswer users(Set<User> users) {
+        this.setUsers(users);
+        return this;
+    }
+
+    public FormAnswer addUser(User user) {
+        this.users.add(user);
+        return this;
+    }
+
+    public FormAnswer removeUser(User user) {
+        this.users.remove(user);
         return this;
     }
 

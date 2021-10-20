@@ -19,14 +19,14 @@ import { FormAnswerService } from 'app/entities/form-answer/service/form-answer.
 export class QuestionAnswerUpdateComponent implements OnInit {
   isSaving = false;
 
-  answersCollection: IQuestions[] = [];
+  questionsCollection: IQuestions[] = [];
   formAnswersSharedCollection: IFormAnswer[] = [];
 
   editForm = this.fb.group({
     id: [],
     answerCode: [],
     answerText: [],
-    answer: [],
+    questions: [],
     formAnswer: [],
   });
 
@@ -92,11 +92,11 @@ export class QuestionAnswerUpdateComponent implements OnInit {
       id: questionAnswer.id,
       answerCode: questionAnswer.answerCode,
       answerText: questionAnswer.answerText,
-      answer: questionAnswer.answer,
+      questions: questionAnswer.questions,
       formAnswer: questionAnswer.formAnswer,
     });
 
-    this.answersCollection = this.questionsService.addQuestionsToCollectionIfMissing(this.answersCollection, questionAnswer.answer);
+    this.questionsCollection = this.questionsService.addQuestionsToCollectionIfMissing(this.questionsCollection, questionAnswer.questions);
     this.formAnswersSharedCollection = this.formAnswerService.addFormAnswerToCollectionIfMissing(
       this.formAnswersSharedCollection,
       questionAnswer.formAnswer
@@ -109,10 +109,10 @@ export class QuestionAnswerUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IQuestions[]>) => res.body ?? []))
       .pipe(
         map((questions: IQuestions[]) =>
-          this.questionsService.addQuestionsToCollectionIfMissing(questions, this.editForm.get('answer')!.value)
+          this.questionsService.addQuestionsToCollectionIfMissing(questions, this.editForm.get('questions')!.value)
         )
       )
-      .subscribe((questions: IQuestions[]) => (this.answersCollection = questions));
+      .subscribe((questions: IQuestions[]) => (this.questionsCollection = questions));
 
     this.formAnswerService
       .query()
@@ -131,7 +131,7 @@ export class QuestionAnswerUpdateComponent implements OnInit {
       id: this.editForm.get(['id'])!.value,
       answerCode: this.editForm.get(['answerCode'])!.value,
       answerText: this.editForm.get(['answerText'])!.value,
-      answer: this.editForm.get(['answer'])!.value,
+      questions: this.editForm.get(['questions'])!.value,
       formAnswer: this.editForm.get(['formAnswer'])!.value,
     };
   }

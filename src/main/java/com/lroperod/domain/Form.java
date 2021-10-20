@@ -34,12 +34,12 @@ public class Form implements Serializable {
 
     @OneToMany(mappedBy = "form")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "form" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "questions", "questionAnswer", "form" }, allowSetters = true)
     private Set<Questions> questions = new HashSet<>();
 
     @OneToMany(mappedBy = "form")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "user", "questionAnswers", "form" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "questionAnswers", "users", "form" }, allowSetters = true)
     private Set<FormAnswer> formAnswers = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

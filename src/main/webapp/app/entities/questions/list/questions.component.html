@@ -3,7 +3,7 @@
     <span pfaTranslate="preventiveformappApp.questions.home.title">Questions</span>
 
     <div class="d-flex justify-content-end">
-      <button class="btn btn-info mr-2" (click)="loadAll()" [disabled]="isLoading">
+      <button class="btn btn-info mr-2" (click)="loadPage()" [disabled]="isLoading">
         <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
         <span pfaTranslate="preventiveformappApp.questions.home.refreshListLabel">Refresh List</span>
       </button>
@@ -31,12 +31,20 @@
   <div class="table-responsive" id="entities" *ngIf="questions && questions.length > 0">
     <table class="table table-striped" aria-describedby="page-heading">
       <thead>
-        <tr>
-          <th scope="col"><span pfaTranslate="global.field.id">ID</span></th>
-          <th scope="col"><span pfaTranslate="preventiveformappApp.questions.questionCode">Question Code</span></th>
-          <th scope="col"><span pfaTranslate="preventiveformappApp.questions.questionText">Question Text</span></th>
-          <th scope="col"><span pfaTranslate="preventiveformappApp.questions.questionType">Question Type</span></th>
-          <th scope="col"><span pfaTranslate="preventiveformappApp.questions.form">Form</span></th>
+        <tr pfaSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="loadPage()">
+          <th scope="col" pfaSortBy="id"><span pfaTranslate="global.field.id">ID</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" pfaSortBy="questionCode">
+            <span pfaTranslate="preventiveformappApp.questions.questionCode">Question Code</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" pfaSortBy="questionText">
+            <span pfaTranslate="preventiveformappApp.questions.questionText">Question Text</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" pfaSortBy="questionType">
+            <span pfaTranslate="preventiveformappApp.questions.questionType">Question Type</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" pfaSortBy="form.formName">
+            <span pfaTranslate="preventiveformappApp.questions.form">Form</span> <fa-icon icon="sort"></fa-icon>
+          </th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -50,7 +58,7 @@
           <td pfaTranslate="{{ 'preventiveformappApp.QuestionType.' + questions.questionType }}">{{ questions.questionType }}</td>
           <td>
             <div *ngIf="questions.form">
-              <a [routerLink]="['/form', questions.form?.id, 'view']">{{ questions.form?.id }}</a>
+              <a [routerLink]="['/form', questions.form?.id, 'view']">{{ questions.form?.formName }}</a>
             </div>
           </td>
           <td class="text-right">
@@ -84,5 +92,23 @@
         </tr>
       </tbody>
     </table>
+  </div>
+
+  <div *ngIf="questions && questions.length > 0">
+    <div class="row justify-content-center">
+      <pfa-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></pfa-item-count>
+    </div>
+
+    <div class="row justify-content-center">
+      <ngb-pagination
+        [collectionSize]="totalItems"
+        [(page)]="ngbPaginationPage"
+        [pageSize]="itemsPerPage"
+        [maxSize]="5"
+        [rotate]="true"
+        [boundaryLinks]="true"
+        (pageChange)="loadPage($event)"
+      ></ngb-pagination>
+    </div>
   </div>
 </div>

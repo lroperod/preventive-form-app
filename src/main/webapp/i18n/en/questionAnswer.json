@@ -20,7 +20,7 @@
       "id": "ID",
       "answerCode": "Answer Code",
       "answerText": "Answer Text",
-      "answer": "Answer",
+      "questions": "Questions",
       "formAnswer": "Form Answer"
     }
   }

@@ -11,6 +11,9 @@ const questionAnswerRoute: Routes = [
   {
     path: '',
     component: QuestionAnswerComponent,
+    data: {
+      defaultSort: 'id,asc',
+    },
     canActivate: [UserRouteAccessService],
   },
   {

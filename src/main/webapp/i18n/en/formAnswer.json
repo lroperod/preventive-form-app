@@ -19,8 +19,8 @@
       },
       "id": "ID",
       "formAnswerLocalDate": "Form Answer Local Date",
-      "user": "User",
       "questionAnswer": "Question Answer",
+      "user": "User",
       "form": "Form"
     }
   }

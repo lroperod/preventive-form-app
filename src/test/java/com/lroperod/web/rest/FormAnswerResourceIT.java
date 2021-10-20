@@ -2,22 +2,32 @@ package com.lroperod.web.rest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.lroperod.IntegrationTest;
 import com.lroperod.domain.FormAnswer;
 import com.lroperod.repository.FormAnswerRepository;
+import com.lroperod.service.FormAnswerService;
+import com.lroperod.service.dto.FormAnswerDTO;
+import com.lroperod.service.mapper.FormAnswerMapper;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
 import javax.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -27,6 +37,7 @@ import org.springframework.transaction.annotation.Transactional;
  * Integration tests for the {@link FormAnswerResource} REST controller.
  */
 @IntegrationTest
+@ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
 @WithMockUser
 class FormAnswerResourceIT {
@@ -42,6 +53,15 @@ class FormAnswerResourceIT {
 
     @Autowired
     private FormAnswerRepository formAnswerRepository;
+
+    @Mock
+    private FormAnswerRepository formAnswerRepositoryMock;
+
+    @Autowired
+    private FormAnswerMapper formAnswerMapper;
+
+    @Mock
+    private FormAnswerService formAnswerServiceMock;
 
     @Autowired
     private EntityManager em;
@@ -83,8 +103,9 @@ class FormAnswerResourceIT {
     void createFormAnswer() throws Exception {
         int databaseSizeBeforeCreate = formAnswerRepository.findAll().size();
         // Create the FormAnswer
+        FormAnswerDTO formAnswerDTO = formAnswerMapper.toDto(formAnswer);
         restFormAnswerMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(formAnswer)))
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(formAnswerDTO)))
             .andExpect(status().isCreated());
 
         // Validate the FormAnswer in the database
@@ -99,12 +120,13 @@ class FormAnswerResourceIT {
     void createFormAnswerWithExistingId() throws Exception {
         // Create the FormAnswer with an existing ID
         formAnswer.setId(1L);
+        FormAnswerDTO formAnswerDTO = formAnswerMapper.toDto(formAnswer);
 
         int databaseSizeBeforeCreate = formAnswerRepository.findAll().size();
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restFormAnswerMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(formAnswer)))
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(formAnswerDTO)))
             .andExpect(status().isBadRequest());
 
         // Validate the FormAnswer in the database
@@ -125,6 +147,24 @@ class FormAnswerResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(formAnswer.getId().intValue())))
             .andExpect(jsonPath("$.[*].formAnswerLocalDate").value(hasItem(DEFAULT_FORM_ANSWER_LOCAL_DATE.toString())));
+    }
+
+    @SuppressWarnings({ "unchecked" })
+    void getAllFormAnswersWithEagerRelationshipsIsEnabled() throws Exception {
+        when(formAnswerServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+
+        restFormAnswerMockMvc.perform(get(ENTITY_API_URL + "?eagerload=true")).andExpect(status().isOk());
+
+        verify(formAnswerServiceMock, times(1)).findAllWithEagerRelationships(any());
+    }
+
+    @SuppressWarnings({ "unchecked" })
+    void getAllFormAnswersWithEagerRelationshipsIsNotEnabled() throws Exception {
+        when(formAnswerServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+
+        restFormAnswerMockMvc.perform(get(ENTITY_API_URL + "?eagerload=true")).andExpect(status().isOk());
+
+        verify(formAnswerServiceMock, times(1)).findAllWithEagerRelationships(any());
     }
 
     @Test
@@ -162,12 +202,13 @@ class FormAnswerResourceIT {
         // Disconnect from session so that the updates on updatedFormAnswer are not directly saved in db
         em.detach(updatedFormAnswer);
         updatedFormAnswer.formAnswerLocalDate(UPDATED_FORM_ANSWER_LOCAL_DATE);
+        FormAnswerDTO formAnswerDTO = formAnswerMapper.toDto(updatedFormAnswer);
 
         restFormAnswerMockMvc
             .perform(
-                put(ENTITY_API_URL_ID, updatedFormAnswer.getId())
+                put(ENTITY_API_URL_ID, formAnswerDTO.getId())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(updatedFormAnswer))
+                    .content(TestUtil.convertObjectToJsonBytes(formAnswerDTO))
             )
             .andExpect(status().isOk());
 
@@ -184,12 +225,15 @@ class FormAnswerResourceIT {
         int databaseSizeBeforeUpdate = formAnswerRepository.findAll().size();
         formAnswer.setId(count.incrementAndGet());
 
+        // Create the FormAnswer
+        FormAnswerDTO formAnswerDTO = formAnswerMapper.toDto(formAnswer);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restFormAnswerMockMvc
             .perform(
-                put(ENTITY_API_URL_ID, formAnswer.getId())
+                put(ENTITY_API_URL_ID, formAnswerDTO.getId())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(formAnswer))
+                    .content(TestUtil.convertObjectToJsonBytes(formAnswerDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -204,12 +248,15 @@ class FormAnswerResourceIT {
         int databaseSizeBeforeUpdate = formAnswerRepository.findAll().size();
         formAnswer.setId(count.incrementAndGet());
 
+        // Create the FormAnswer
+        FormAnswerDTO formAnswerDTO = formAnswerMapper.toDto(formAnswer);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restFormAnswerMockMvc
             .perform(
                 put(ENTITY_API_URL_ID, count.incrementAndGet())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(formAnswer))
+                    .content(TestUtil.convertObjectToJsonBytes(formAnswerDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -224,9 +271,12 @@ class FormAnswerResourceIT {
         int databaseSizeBeforeUpdate = formAnswerRepository.findAll().size();
         formAnswer.setId(count.incrementAndGet());
 
+        // Create the FormAnswer
+        FormAnswerDTO formAnswerDTO = formAnswerMapper.toDto(formAnswer);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restFormAnswerMockMvc
-            .perform(put(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(formAnswer)))
+            .perform(put(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(formAnswerDTO)))
             .andExpect(status().isMethodNotAllowed());
 
         // Validate the FormAnswer in the database
@@ -298,12 +348,15 @@ class FormAnswerResourceIT {
         int databaseSizeBeforeUpdate = formAnswerRepository.findAll().size();
         formAnswer.setId(count.incrementAndGet());
 
+        // Create the FormAnswer
+        FormAnswerDTO formAnswerDTO = formAnswerMapper.toDto(formAnswer);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restFormAnswerMockMvc
             .perform(
-                patch(ENTITY_API_URL_ID, formAnswer.getId())
+                patch(ENTITY_API_URL_ID, formAnswerDTO.getId())
                     .contentType("application/merge-patch+json")
-                    .content(TestUtil.convertObjectToJsonBytes(formAnswer))
+                    .content(TestUtil.convertObjectToJsonBytes(formAnswerDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -318,12 +371,15 @@ class FormAnswerResourceIT {
         int databaseSizeBeforeUpdate = formAnswerRepository.findAll().size();
         formAnswer.setId(count.incrementAndGet());
 
+        // Create the FormAnswer
+        FormAnswerDTO formAnswerDTO = formAnswerMapper.toDto(formAnswer);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restFormAnswerMockMvc
             .perform(
                 patch(ENTITY_API_URL_ID, count.incrementAndGet())
                     .contentType("application/merge-patch+json")
-                    .content(TestUtil.convertObjectToJsonBytes(formAnswer))
+                    .content(TestUtil.convertObjectToJsonBytes(formAnswerDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -338,10 +394,13 @@ class FormAnswerResourceIT {
         int databaseSizeBeforeUpdate = formAnswerRepository.findAll().size();
         formAnswer.setId(count.incrementAndGet());
 
+        // Create the FormAnswer
+        FormAnswerDTO formAnswerDTO = formAnswerMapper.toDto(formAnswer);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restFormAnswerMockMvc
             .perform(
-                patch(ENTITY_API_URL).contentType("application/merge-patch+json").content(TestUtil.convertObjectToJsonBytes(formAnswer))
+                patch(ENTITY_API_URL).contentType("application/merge-patch+json").content(TestUtil.convertObjectToJsonBytes(formAnswerDTO))
             )
             .andExpect(status().isMethodNotAllowed());
 
