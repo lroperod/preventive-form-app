@@ -7,20 +7,17 @@
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
     <!--
-        Added the entity FormAnswer.
+        Added the entity Form.
     -->
-    <changeSet id="20211019160620-1" author="jhipster">
-        <createTable tableName="form_answer">
+    <changeSet id="20211020152539-1" author="jhipster">
+        <createTable tableName="form">
             <column name="id" type="bigint">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="form_answer_local_date" type="date">
-                <constraints nullable="true" />
+            <column name="form_name" type="varchar(255)">
+                <constraints nullable="false" />
             </column>
-            <column name="user_id" type="bigint">
-                <constraints nullable="true" unique="true" uniqueConstraintName="ux_form_answer__user_id" />
-            </column>
-            <column name="form_id" type="bigint">
+            <column name="description" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
@@ -37,14 +34,15 @@
           This can be customized by adding or removing 'faker' in the 'spring.liquibase.contexts'
           Spring Boot configuration key.
     -->
-    <changeSet id="20211019160620-1-data" author="jhipster" context="faker">
+    <changeSet id="20211020152539-1-data" author="jhipster" context="faker">
         <loadData
-                  file="config/liquibase/fake-data/form_answer.csv"
+                  file="config/liquibase/fake-data/form.csv"
                   separator=";"
-                  tableName="form_answer"
+                  tableName="form"
                   usePreparedStatements="true">
             <column name="id" type="numeric"/>
-            <column name="form_answer_local_date" type="date"/>
+            <column name="form_name" type="string"/>
+            <column name="description" type="string"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>
     </changeSet>

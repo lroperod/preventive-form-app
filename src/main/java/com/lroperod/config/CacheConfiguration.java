@@ -53,7 +53,6 @@ public class CacheConfiguration {
             createCache(cm, com.lroperod.domain.Form.class.getName() + ".formAnswers");
             createCache(cm, com.lroperod.domain.Questions.class.getName());
             createCache(cm, com.lroperod.domain.QuestionOption.class.getName());
-            createCache(cm, com.lroperod.domain.QuestionOption.class.getName() + ".questions");
             createCache(cm, com.lroperod.domain.QuestionAnswer.class.getName());
             createCache(cm, com.lroperod.domain.FormAnswer.class.getName());
             createCache(cm, com.lroperod.domain.FormAnswer.class.getName() + ".questionAnswers");

@@ -7,12 +7,8 @@ import { finalize, map } from 'rxjs/operators';
 
 import { IQuestions, Questions } from '../questions.model';
 import { QuestionsService } from '../service/questions.service';
-import { IQuestionAnswer } from 'app/entities/question-answer/question-answer.model';
-import { QuestionAnswerService } from 'app/entities/question-answer/service/question-answer.service';
 import { IForm } from 'app/entities/form/form.model';
 import { FormService } from 'app/entities/form/service/form.service';
-import { IQuestionOption } from 'app/entities/question-option/question-option.model';
-import { QuestionOptionService } from 'app/entities/question-option/service/question-option.service';
 
 @Component({
   selector: 'pfa-questions-update',
@@ -21,25 +17,19 @@ import { QuestionOptionService } from 'app/entities/question-option/service/ques
 export class QuestionsUpdateComponent implements OnInit {
   isSaving = false;
 
-  questionsCollection: IQuestionAnswer[] = [];
   formsSharedCollection: IForm[] = [];
-  questionOptionsSharedCollection: IQuestionOption[] = [];
 
   editForm = this.fb.group({
     id: [],
     questionCode: [],
     questionText: [],
     questionType: [],
-    question: [],
     form: [],
-    questionOption: [],
   });
 
   constructor(
     protected questionsService: QuestionsService,
-    protected questionAnswerService: QuestionAnswerService,
     protected formService: FormService,
-    protected questionOptionService: QuestionOptionService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder
   ) {}
@@ -66,15 +56,7 @@ export class QuestionsUpdateComponent implements OnInit {
     }
   }
 
-  trackQuestionAnswerById(index: number, item: IQuestionAnswer): number {
-    return item.id!;
-  }
-
   trackFormById(index: number, item: IForm): number {
-    return item.id!;
-  }
-
-  trackQuestionOptionById(index: number, item: IQuestionOption): number {
     return item.id!;
   }
 
@@ -103,48 +85,18 @@ export class QuestionsUpdateComponent implements OnInit {
       questionCode: questions.questionCode,
       questionText: questions.questionText,
       questionType: questions.questionType,
-      question: questions.question,
       form: questions.form,
-      questionOption: questions.questionOption,
     });
 
-    this.questionsCollection = this.questionAnswerService.addQuestionAnswerToCollectionIfMissing(
-      this.questionsCollection,
-      questions.question
-    );
     this.formsSharedCollection = this.formService.addFormToCollectionIfMissing(this.formsSharedCollection, questions.form);
-    this.questionOptionsSharedCollection = this.questionOptionService.addQuestionOptionToCollectionIfMissing(
-      this.questionOptionsSharedCollection,
-      questions.questionOption
-    );
   }
 
   protected loadRelationshipsOptions(): void {
-    this.questionAnswerService
-      .query({ filter: 'questions-is-null' })
-      .pipe(map((res: HttpResponse<IQuestionAnswer[]>) => res.body ?? []))
-      .pipe(
-        map((questionAnswers: IQuestionAnswer[]) =>
-          this.questionAnswerService.addQuestionAnswerToCollectionIfMissing(questionAnswers, this.editForm.get('question')!.value)
-        )
-      )
-      .subscribe((questionAnswers: IQuestionAnswer[]) => (this.questionsCollection = questionAnswers));
-
     this.formService
       .query()
       .pipe(map((res: HttpResponse<IForm[]>) => res.body ?? []))
       .pipe(map((forms: IForm[]) => this.formService.addFormToCollectionIfMissing(forms, this.editForm.get('form')!.value)))
       .subscribe((forms: IForm[]) => (this.formsSharedCollection = forms));
-
-    this.questionOptionService
-      .query()
-      .pipe(map((res: HttpResponse<IQuestionOption[]>) => res.body ?? []))
-      .pipe(
-        map((questionOptions: IQuestionOption[]) =>
-          this.questionOptionService.addQuestionOptionToCollectionIfMissing(questionOptions, this.editForm.get('questionOption')!.value)
-        )
-      )
-      .subscribe((questionOptions: IQuestionOption[]) => (this.questionOptionsSharedCollection = questionOptions));
   }
 
   protected createFromForm(): IQuestions {
@@ -154,9 +106,7 @@ export class QuestionsUpdateComponent implements OnInit {
       questionCode: this.editForm.get(['questionCode'])!.value,
       questionText: this.editForm.get(['questionText'])!.value,
       questionType: this.editForm.get(['questionType'])!.value,
-      question: this.editForm.get(['question'])!.value,
       form: this.editForm.get(['form'])!.value,
-      questionOption: this.editForm.get(['questionOption'])!.value,
     };
   }
 }

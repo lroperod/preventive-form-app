@@ -157,3 +157,12 @@ Desktop.ini
 ######################
 /coverage/
 /.nyc_output/
+
+######################
+# Properties
+######################
+application-dev.yml
+application-prod.yml
+application-tls.yml
+keystore.p12
+/src/main/resources/config/tls

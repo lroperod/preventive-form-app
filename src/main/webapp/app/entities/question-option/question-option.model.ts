@@ -4,7 +4,7 @@ export interface IQuestionOption {
   id?: number;
   questionOptionsCode?: string | null;
   questionOptionsText?: string | null;
-  questions?: IQuestions[] | null;
+  questions?: IQuestions | null;
 }
 
 export class QuestionOption implements IQuestionOption {
@@ -12,7 +12,7 @@ export class QuestionOption implements IQuestionOption {
     public id?: number,
     public questionOptionsCode?: string | null,
     public questionOptionsText?: string | null,
-    public questions?: IQuestions[] | null
+    public questions?: IQuestions | null
   ) {}
 }
 

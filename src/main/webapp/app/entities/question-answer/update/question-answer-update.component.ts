@@ -7,6 +7,8 @@ import { finalize, map } from 'rxjs/operators';
 
 import { IQuestionAnswer, QuestionAnswer } from '../question-answer.model';
 import { QuestionAnswerService } from '../service/question-answer.service';
+import { IQuestions } from 'app/entities/questions/questions.model';
+import { QuestionsService } from 'app/entities/questions/service/questions.service';
 import { IFormAnswer } from 'app/entities/form-answer/form-answer.model';
 import { FormAnswerService } from 'app/entities/form-answer/service/form-answer.service';
 
@@ -17,17 +19,20 @@ import { FormAnswerService } from 'app/entities/form-answer/service/form-answer.
 export class QuestionAnswerUpdateComponent implements OnInit {
   isSaving = false;
 
+  answersCollection: IQuestions[] = [];
   formAnswersSharedCollection: IFormAnswer[] = [];
 
   editForm = this.fb.group({
     id: [],
     answerCode: [],
     answerText: [],
+    answer: [],
     formAnswer: [],
   });
 
   constructor(
     protected questionAnswerService: QuestionAnswerService,
+    protected questionsService: QuestionsService,
     protected formAnswerService: FormAnswerService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder
@@ -53,6 +58,10 @@ export class QuestionAnswerUpdateComponent implements OnInit {
     } else {
       this.subscribeToSaveResponse(this.questionAnswerService.create(questionAnswer));
     }
+  }
+
+  trackQuestionsById(index: number, item: IQuestions): number {
+    return item.id!;
   }
 
   trackFormAnswerById(index: number, item: IFormAnswer): number {
@@ -83,9 +92,11 @@ export class QuestionAnswerUpdateComponent implements OnInit {
       id: questionAnswer.id,
       answerCode: questionAnswer.answerCode,
       answerText: questionAnswer.answerText,
+      answer: questionAnswer.answer,
       formAnswer: questionAnswer.formAnswer,
     });
 
+    this.answersCollection = this.questionsService.addQuestionsToCollectionIfMissing(this.answersCollection, questionAnswer.answer);
     this.formAnswersSharedCollection = this.formAnswerService.addFormAnswerToCollectionIfMissing(
       this.formAnswersSharedCollection,
       questionAnswer.formAnswer
@@ -93,6 +104,16 @@ export class QuestionAnswerUpdateComponent implements OnInit {
   }
 
   protected loadRelationshipsOptions(): void {
+    this.questionsService
+      .query({ filter: 'questionanswer-is-null' })
+      .pipe(map((res: HttpResponse<IQuestions[]>) => res.body ?? []))
+      .pipe(
+        map((questions: IQuestions[]) =>
+          this.questionsService.addQuestionsToCollectionIfMissing(questions, this.editForm.get('answer')!.value)
+        )
+      )
+      .subscribe((questions: IQuestions[]) => (this.answersCollection = questions));
+
     this.formAnswerService
       .query()
       .pipe(map((res: HttpResponse<IFormAnswer[]>) => res.body ?? []))
@@ -110,6 +131,7 @@ export class QuestionAnswerUpdateComponent implements OnInit {
       id: this.editForm.get(['id'])!.value,
       answerCode: this.editForm.get(['answerCode'])!.value,
       answerText: this.editForm.get(['answerText'])!.value,
+      answer: this.editForm.get(['answer'])!.value,
       formAnswer: this.editForm.get(['formAnswer'])!.value,
     };
   }

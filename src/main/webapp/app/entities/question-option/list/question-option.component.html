@@ -35,6 +35,7 @@
           <th scope="col"><span pfaTranslate="global.field.id">ID</span></th>
           <th scope="col"><span pfaTranslate="preventiveformappApp.questionOption.questionOptionsCode">Question Options Code</span></th>
           <th scope="col"><span pfaTranslate="preventiveformappApp.questionOption.questionOptionsText">Question Options Text</span></th>
+          <th scope="col"><span pfaTranslate="preventiveformappApp.questionOption.questions">Questions</span></th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -45,6 +46,11 @@
           </td>
           <td>{{ questionOption.questionOptionsCode }}</td>
           <td>{{ questionOption.questionOptionsText }}</td>
+          <td>
+            <div *ngIf="questionOption.questions">
+              <a [routerLink]="['/questions', questionOption.questions?.id, 'view']">{{ questionOption.questions?.id }}</a>
+            </div>
+          </td>
           <td class="text-right">
             <div class="btn-group">
               <button

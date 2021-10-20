@@ -12,6 +12,13 @@
   ],
   "relationships": [
     {
+      "relationshipType": "one-to-one",
+      "otherEntityName": "questions",
+      "otherEntityRelationshipName": "questionAnswer",
+      "relationshipName": "answer",
+      "ownerSide": true
+    },
+    {
       "relationshipType": "many-to-one",
       "otherEntityName": "formAnswer",
       "otherEntityRelationshipName": "questionAnswer",
@@ -27,5 +34,5 @@
   "readOnly": false,
   "embedded": false,
   "applications": ["preventiveformapp"],
-  "changelogDate": "20211019160520"
+  "changelogDate": "20211020152839"
 }

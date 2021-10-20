@@ -9,6 +9,8 @@ import { of, Subject } from 'rxjs';
 
 import { QuestionOptionService } from '../service/question-option.service';
 import { IQuestionOption, QuestionOption } from '../question-option.model';
+import { IQuestions } from 'app/entities/questions/questions.model';
+import { QuestionsService } from 'app/entities/questions/service/questions.service';
 
 import { QuestionOptionUpdateComponent } from './question-option-update.component';
 
@@ -18,6 +20,7 @@ describe('Component Tests', () => {
     let fixture: ComponentFixture<QuestionOptionUpdateComponent>;
     let activatedRoute: ActivatedRoute;
     let questionOptionService: QuestionOptionService;
+    let questionsService: QuestionsService;
 
     beforeEach(() => {
       TestBed.configureTestingModule({
@@ -31,18 +34,41 @@ describe('Component Tests', () => {
       fixture = TestBed.createComponent(QuestionOptionUpdateComponent);
       activatedRoute = TestBed.inject(ActivatedRoute);
       questionOptionService = TestBed.inject(QuestionOptionService);
+      questionsService = TestBed.inject(QuestionsService);
 
       comp = fixture.componentInstance;
     });
 
     describe('ngOnInit', () => {
+      it('Should call Questions query and add missing value', () => {
+        const questionOption: IQuestionOption = { id: 456 };
+        const questions: IQuestions = { id: 83794 };
+        questionOption.questions = questions;
+
+        const questionsCollection: IQuestions[] = [{ id: 46285 }];
+        jest.spyOn(questionsService, 'query').mockReturnValue(of(new HttpResponse({ body: questionsCollection })));
+        const additionalQuestions = [questions];
+        const expectedCollection: IQuestions[] = [...additionalQuestions, ...questionsCollection];
+        jest.spyOn(questionsService, 'addQuestionsToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+        activatedRoute.data = of({ questionOption });
+        comp.ngOnInit();
+
+        expect(questionsService.query).toHaveBeenCalled();
+        expect(questionsService.addQuestionsToCollectionIfMissing).toHaveBeenCalledWith(questionsCollection, ...additionalQuestions);
+        expect(comp.questionsSharedCollection).toEqual(expectedCollection);
+      });
+
       it('Should update editForm', () => {
         const questionOption: IQuestionOption = { id: 456 };
+        const questions: IQuestions = { id: 59573 };
+        questionOption.questions = questions;
 
         activatedRoute.data = of({ questionOption });
         comp.ngOnInit();
 
         expect(comp.editForm.value).toEqual(expect.objectContaining(questionOption));
+        expect(comp.questionsSharedCollection).toContain(questions);
       });
     });
 
@@ -107,6 +133,16 @@ describe('Component Tests', () => {
         expect(questionOptionService.update).toHaveBeenCalledWith(questionOption);
         expect(comp.isSaving).toEqual(false);
         expect(comp.previousState).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('Tracking relationships identifiers', () => {
+      describe('trackQuestionsById', () => {
+        it('Should return tracked Questions primary key', () => {
+          const entity = { id: 123 };
+          const trackResult = comp.trackQuestionsById(0, entity);
+          expect(trackResult).toEqual(entity.id);
+        });
       });
     });
   });

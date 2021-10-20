@@ -17,23 +17,10 @@
   ],
   "relationships": [
     {
-      "relationshipType": "one-to-one",
-      "otherEntityName": "questionAnswer",
-      "otherEntityRelationshipName": "questions",
-      "relationshipName": "question",
-      "ownerSide": true
-    },
-    {
       "relationshipType": "many-to-one",
       "otherEntityName": "form",
       "otherEntityRelationshipName": "questions",
       "relationshipName": "form"
-    },
-    {
-      "relationshipType": "many-to-one",
-      "otherEntityName": "questionOption",
-      "otherEntityRelationshipName": "questions",
-      "relationshipName": "questionOption"
     }
   ],
   "entityTableName": "questions",
@@ -45,5 +32,5 @@
   "readOnly": false,
   "embedded": false,
   "applications": ["preventiveformapp"],
-  "changelogDate": "20211019160320"
+  "changelogDate": "20211020152639"
 }

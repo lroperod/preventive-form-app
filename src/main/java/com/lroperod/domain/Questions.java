@@ -33,18 +33,9 @@ public class Questions implements Serializable {
     @Column(name = "question_type")
     private QuestionType questionType;
 
-    @JsonIgnoreProperties(value = { "formAnswer" }, allowSetters = true)
-    @OneToOne
-    @JoinColumn(unique = true)
-    private QuestionAnswer question;
-
     @ManyToOne
     @JsonIgnoreProperties(value = { "questions", "formAnswers" }, allowSetters = true)
     private Form form;
-
-    @ManyToOne
-    @JsonIgnoreProperties(value = { "questions" }, allowSetters = true)
-    private QuestionOption questionOption;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -100,19 +91,6 @@ public class Questions implements Serializable {
         this.questionType = questionType;
     }
 
-    public QuestionAnswer getQuestion() {
-        return this.question;
-    }
-
-    public void setQuestion(QuestionAnswer questionAnswer) {
-        this.question = questionAnswer;
-    }
-
-    public Questions question(QuestionAnswer questionAnswer) {
-        this.setQuestion(questionAnswer);
-        return this;
-    }
-
     public Form getForm() {
         return this.form;
     }
@@ -123,19 +101,6 @@ public class Questions implements Serializable {
 
     public Questions form(Form form) {
         this.setForm(form);
-        return this;
-    }
-
-    public QuestionOption getQuestionOption() {
-        return this.questionOption;
-    }
-
-    public void setQuestionOption(QuestionOption questionOption) {
-        this.questionOption = questionOption;
-    }
-
-    public Questions questionOption(QuestionOption questionOption) {
-        this.setQuestionOption(questionOption);
         return this;
     }
 

@@ -24,6 +24,12 @@
         <dd>
           <span>{{ questionAnswer.answerText }}</span>
         </dd>
+        <dt><span pfaTranslate="preventiveformappApp.questionAnswer.answer">Answer</span></dt>
+        <dd>
+          <div *ngIf="questionAnswer.answer">
+            <a [routerLink]="['/questions', questionAnswer.answer?.id, 'view']">{{ questionAnswer.answer?.id }}</a>
+          </div>
+        </dd>
         <dt><span pfaTranslate="preventiveformappApp.questionAnswer.formAnswer">Form Answer</span></dt>
         <dd>
           <div *ngIf="questionAnswer.formAnswer">

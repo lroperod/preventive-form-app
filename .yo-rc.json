@@ -43,9 +43,9 @@
     "otherModules": [],
     "pages": [],
     "nativeLanguage": "en",
-    "creationTimestamp": 1634659280176,
-    "jwtSecretKey": "YWVmM2NkMDM4ZWZlNGRjZDRmMDJmMjQ5MzA3YTJmNjViMDRmY2EwOWNiZjg1ZTAwZGNkNjYyMzIyYjAwYzcwMDhiYzhjNWJiMjk3ODAyM2ZkNDliZDBkZWE2MTYyMzc3ZTA2NjVlMzk0MmE0MzY4ZTFiZTE1MTkzNGU3OGQ4MDY=",
+    "creationTimestamp": 1634743479231,
+    "jwtSecretKey": "NWY3NjgyNmU2ZWU3Mzk1NjE5ZmYxZWFhZjYyZGE2YzM3ZTViM2ZiYzljZjVmM2MzMTNmNDcxZmEyOThlZDU0ZjkzNmE3Njg3YjYxOTI1MmYxODEyMmU3MTg0YmQ3YTIzZmFjNmUxNjExMTY5OTE4OWIyZTI5NDEwODI4ZjQ0MjM=",
     "devServerPort": 4200,
-    "lastLiquibaseTimestamp": 1634659580000
+    "lastLiquibaseTimestamp": 1634743779000
   }
 }

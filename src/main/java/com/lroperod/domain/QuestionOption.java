@@ -2,8 +2,6 @@ package com.lroperod.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 import javax.persistence.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -30,10 +28,9 @@ public class QuestionOption implements Serializable {
     @Column(name = "question_options_text")
     private String questionOptionsText;
 
-    @OneToMany(mappedBy = "questionOption")
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "question", "form", "questionOption" }, allowSetters = true)
-    private Set<Questions> questions = new HashSet<>();
+    @ManyToOne
+    @JsonIgnoreProperties(value = { "form" }, allowSetters = true)
+    private Questions questions;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -76,34 +73,16 @@ public class QuestionOption implements Serializable {
         this.questionOptionsText = questionOptionsText;
     }
 
-    public Set<Questions> getQuestions() {
+    public Questions getQuestions() {
         return this.questions;
     }
 
-    public void setQuestions(Set<Questions> questions) {
-        if (this.questions != null) {
-            this.questions.forEach(i -> i.setQuestionOption(null));
-        }
-        if (questions != null) {
-            questions.forEach(i -> i.setQuestionOption(this));
-        }
+    public void setQuestions(Questions questions) {
         this.questions = questions;
     }
 
-    public QuestionOption questions(Set<Questions> questions) {
+    public QuestionOption questions(Questions questions) {
         this.setQuestions(questions);
-        return this;
-    }
-
-    public QuestionOption addQuestions(Questions questions) {
-        this.questions.add(questions);
-        questions.setQuestionOption(this);
-        return this;
-    }
-
-    public QuestionOption removeQuestions(Questions questions) {
-        this.questions.remove(questions);
-        questions.setQuestionOption(null);
         return this;
     }
 

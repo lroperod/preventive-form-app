@@ -50,6 +50,21 @@
             formControlName="questionOptionsText"
           />
         </div>
+
+        <div class="form-group">
+          <label class="form-control-label" pfaTranslate="preventiveformappApp.questionOption.questions" for="field_questions"
+            >Questions</label
+          >
+          <select class="form-control" id="field_questions" data-cy="questions" name="questions" formControlName="questions">
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="questionsOption.id === editForm.get('questions')!.value?.id ? editForm.get('questions')!.value : questionsOption"
+              *ngFor="let questionsOption of questionsSharedCollection; trackBy: trackQuestionsById"
+            >
+              {{ questionsOption.id }}
+            </option>
+          </select>
+        </div>
       </div>
 
       <div>

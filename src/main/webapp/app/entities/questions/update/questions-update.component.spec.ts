@@ -9,12 +9,8 @@ import { of, Subject } from 'rxjs';
 
 import { QuestionsService } from '../service/questions.service';
 import { IQuestions, Questions } from '../questions.model';
-import { IQuestionAnswer } from 'app/entities/question-answer/question-answer.model';
-import { QuestionAnswerService } from 'app/entities/question-answer/service/question-answer.service';
 import { IForm } from 'app/entities/form/form.model';
 import { FormService } from 'app/entities/form/service/form.service';
-import { IQuestionOption } from 'app/entities/question-option/question-option.model';
-import { QuestionOptionService } from 'app/entities/question-option/service/question-option.service';
 
 import { QuestionsUpdateComponent } from './questions-update.component';
 
@@ -24,9 +20,7 @@ describe('Component Tests', () => {
     let fixture: ComponentFixture<QuestionsUpdateComponent>;
     let activatedRoute: ActivatedRoute;
     let questionsService: QuestionsService;
-    let questionAnswerService: QuestionAnswerService;
     let formService: FormService;
-    let questionOptionService: QuestionOptionService;
 
     beforeEach(() => {
       TestBed.configureTestingModule({
@@ -40,32 +34,12 @@ describe('Component Tests', () => {
       fixture = TestBed.createComponent(QuestionsUpdateComponent);
       activatedRoute = TestBed.inject(ActivatedRoute);
       questionsService = TestBed.inject(QuestionsService);
-      questionAnswerService = TestBed.inject(QuestionAnswerService);
       formService = TestBed.inject(FormService);
-      questionOptionService = TestBed.inject(QuestionOptionService);
 
       comp = fixture.componentInstance;
     });
 
     describe('ngOnInit', () => {
-      it('Should call question query and add missing value', () => {
-        const questions: IQuestions = { id: 456 };
-        const question: IQuestionAnswer = { id: 65103 };
-        questions.question = question;
-
-        const questionCollection: IQuestionAnswer[] = [{ id: 85758 }];
-        jest.spyOn(questionAnswerService, 'query').mockReturnValue(of(new HttpResponse({ body: questionCollection })));
-        const expectedCollection: IQuestionAnswer[] = [question, ...questionCollection];
-        jest.spyOn(questionAnswerService, 'addQuestionAnswerToCollectionIfMissing').mockReturnValue(expectedCollection);
-
-        activatedRoute.data = of({ questions });
-        comp.ngOnInit();
-
-        expect(questionAnswerService.query).toHaveBeenCalled();
-        expect(questionAnswerService.addQuestionAnswerToCollectionIfMissing).toHaveBeenCalledWith(questionCollection, question);
-        expect(comp.questionsCollection).toEqual(expectedCollection);
-      });
-
       it('Should call Form query and add missing value', () => {
         const questions: IQuestions = { id: 456 };
         const form: IForm = { id: 96076 };
@@ -85,44 +59,16 @@ describe('Component Tests', () => {
         expect(comp.formsSharedCollection).toEqual(expectedCollection);
       });
 
-      it('Should call QuestionOption query and add missing value', () => {
-        const questions: IQuestions = { id: 456 };
-        const questionOption: IQuestionOption = { id: 74821 };
-        questions.questionOption = questionOption;
-
-        const questionOptionCollection: IQuestionOption[] = [{ id: 93778 }];
-        jest.spyOn(questionOptionService, 'query').mockReturnValue(of(new HttpResponse({ body: questionOptionCollection })));
-        const additionalQuestionOptions = [questionOption];
-        const expectedCollection: IQuestionOption[] = [...additionalQuestionOptions, ...questionOptionCollection];
-        jest.spyOn(questionOptionService, 'addQuestionOptionToCollectionIfMissing').mockReturnValue(expectedCollection);
-
-        activatedRoute.data = of({ questions });
-        comp.ngOnInit();
-
-        expect(questionOptionService.query).toHaveBeenCalled();
-        expect(questionOptionService.addQuestionOptionToCollectionIfMissing).toHaveBeenCalledWith(
-          questionOptionCollection,
-          ...additionalQuestionOptions
-        );
-        expect(comp.questionOptionsSharedCollection).toEqual(expectedCollection);
-      });
-
       it('Should update editForm', () => {
         const questions: IQuestions = { id: 456 };
-        const question: IQuestionAnswer = { id: 10574 };
-        questions.question = question;
         const form: IForm = { id: 8588 };
         questions.form = form;
-        const questionOption: IQuestionOption = { id: 32950 };
-        questions.questionOption = questionOption;
 
         activatedRoute.data = of({ questions });
         comp.ngOnInit();
 
         expect(comp.editForm.value).toEqual(expect.objectContaining(questions));
-        expect(comp.questionsCollection).toContain(question);
         expect(comp.formsSharedCollection).toContain(form);
-        expect(comp.questionOptionsSharedCollection).toContain(questionOption);
       });
     });
 
@@ -191,26 +137,10 @@ describe('Component Tests', () => {
     });
 
     describe('Tracking relationships identifiers', () => {
-      describe('trackQuestionAnswerById', () => {
-        it('Should return tracked QuestionAnswer primary key', () => {
-          const entity = { id: 123 };
-          const trackResult = comp.trackQuestionAnswerById(0, entity);
-          expect(trackResult).toEqual(entity.id);
-        });
-      });
-
       describe('trackFormById', () => {
         it('Should return tracked Form primary key', () => {
           const entity = { id: 123 };
           const trackResult = comp.trackFormById(0, entity);
-          expect(trackResult).toEqual(entity.id);
-        });
-      });
-
-      describe('trackQuestionOptionById', () => {
-        it('Should return tracked QuestionOption primary key', () => {
-          const entity = { id: 123 };
-          const trackResult = comp.trackQuestionOptionById(0, entity);
           expect(trackResult).toEqual(entity.id);
         });
       });

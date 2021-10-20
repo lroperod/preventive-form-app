@@ -4,14 +4,14 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd">
     <!--
-        Added the constraints for entity QuestionAnswer.
+        Added the constraints for entity QuestionOption.
     -->
-    <changeSet id="20211019160520-2" author="jhipster">
+    <changeSet id="20211020152739-2" author="jhipster">
 
-        <addForeignKeyConstraint baseColumnNames="form_answer_id"
-                                 baseTableName="question_answer"
-                                 constraintName="fk_question_answer__form_answer_id"
+        <addForeignKeyConstraint baseColumnNames="questions_id"
+                                 baseTableName="question_option"
+                                 constraintName="fk_question_option__questions_id"
                                  referencedColumnNames="id"
-                                 referencedTableName="form_answer"/>
+                                 referencedTableName="questions"/>
     </changeSet>
 </databaseChangeLog>

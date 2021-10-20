@@ -26,22 +26,10 @@
         <dd>
           <span pfaTranslate="{{ 'preventiveformappApp.QuestionType.' + questions.questionType }}">{{ questions.questionType }}</span>
         </dd>
-        <dt><span pfaTranslate="preventiveformappApp.questions.question">Question</span></dt>
-        <dd>
-          <div *ngIf="questions.question">
-            <a [routerLink]="['/question-answer', questions.question?.id, 'view']">{{ questions.question?.id }}</a>
-          </div>
-        </dd>
         <dt><span pfaTranslate="preventiveformappApp.questions.form">Form</span></dt>
         <dd>
           <div *ngIf="questions.form">
             <a [routerLink]="['/form', questions.form?.id, 'view']">{{ questions.form?.id }}</a>
-          </div>
-        </dd>
-        <dt><span pfaTranslate="preventiveformappApp.questions.questionOption">Question Option</span></dt>
-        <dd>
-          <div *ngIf="questions.questionOption">
-            <a [routerLink]="['/question-option', questions.questionOption?.id, 'view']">{{ questions.questionOption?.id }}</a>
           </div>
         </dd>
       </dl>

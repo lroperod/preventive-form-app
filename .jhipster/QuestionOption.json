@@ -12,7 +12,7 @@
   ],
   "relationships": [
     {
-      "relationshipType": "one-to-many",
+      "relationshipType": "many-to-one",
       "otherEntityName": "questions",
       "otherEntityRelationshipName": "questionOption",
       "relationshipName": "questions"
@@ -27,5 +27,5 @@
   "readOnly": false,
   "embedded": false,
   "applications": ["preventiveformapp"],
-  "changelogDate": "20211019160420"
+  "changelogDate": "20211020152739"
 }

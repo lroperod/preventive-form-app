@@ -28,6 +28,11 @@ public class QuestionAnswer implements Serializable {
     @Column(name = "answer_text")
     private String answerText;
 
+    @JsonIgnoreProperties(value = { "form" }, allowSetters = true)
+    @OneToOne
+    @JoinColumn(unique = true)
+    private Questions answer;
+
     @ManyToOne
     @JsonIgnoreProperties(value = { "user", "questionAnswers", "form" }, allowSetters = true)
     private FormAnswer formAnswer;
@@ -71,6 +76,19 @@ public class QuestionAnswer implements Serializable {
 
     public void setAnswerText(String answerText) {
         this.answerText = answerText;
+    }
+
+    public Questions getAnswer() {
+        return this.answer;
+    }
+
+    public void setAnswer(Questions questions) {
+        this.answer = questions;
+    }
+
+    public QuestionAnswer answer(Questions questions) {
+        this.setAnswer(questions);
+        return this;
     }
 
     public FormAnswer getFormAnswer() {

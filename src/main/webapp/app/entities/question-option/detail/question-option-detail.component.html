@@ -24,6 +24,12 @@
         <dd>
           <span>{{ questionOption.questionOptionsText }}</span>
         </dd>
+        <dt><span pfaTranslate="preventiveformappApp.questionOption.questions">Questions</span></dt>
+        <dd>
+          <div *ngIf="questionOption.questions">
+            <a [routerLink]="['/questions', questionOption.questions?.id, 'view']">{{ questionOption.questions?.id }}</a>
+          </div>
+        </dd>
       </dl>
 
       <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">

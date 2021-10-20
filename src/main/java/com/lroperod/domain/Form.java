@@ -34,7 +34,7 @@ public class Form implements Serializable {
 
     @OneToMany(mappedBy = "form")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "question", "form", "questionOption" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "form" }, allowSetters = true)
     private Set<Questions> questions = new HashSet<>();
 
     @OneToMany(mappedBy = "form")
