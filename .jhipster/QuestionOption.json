@@ -1,0 +1,32 @@
+{
+  "name": "QuestionOption",
+  "fields": [
+    {
+      "fieldName": "questionOptionsCode",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "questionOptionsText",
+      "fieldType": "String"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "questions",
+      "otherEntityRelationshipName": "questions",
+      "relationshipName": "questions",
+      "otherEntityField": "questionText"
+    }
+  ],
+  "entityTableName": "question_option",
+  "dto": "mapstruct",
+  "pagination": "pagination",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": ["preventiveformapp"],
+  "changelogDate": "20211020152739"
+}

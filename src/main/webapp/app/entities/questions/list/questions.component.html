@@ -1,0 +1,114 @@
+<div>
+  <h2 id="page-heading" data-cy="QuestionsHeading">
+    <span pfaTranslate="preventiveformappApp.questions.home.title">Questions</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info mr-2" (click)="loadPage()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span pfaTranslate="preventiveformappApp.questions.home.refreshListLabel">Refresh List</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-questions"
+        [routerLink]="['/questions/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span pfaTranslate="preventiveformappApp.questions.home.createLabel"> Create a new Questions </span>
+      </button>
+    </div>
+  </h2>
+
+  <pfa-alert-error></pfa-alert-error>
+
+  <pfa-alert></pfa-alert>
+
+  <div class="alert alert-warning" id="no-result" *ngIf="questions?.length === 0">
+    <span pfaTranslate="preventiveformappApp.questions.home.notFound">No questions found</span>
+  </div>
+
+  <div class="table-responsive" id="entities" *ngIf="questions && questions.length > 0">
+    <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr pfaSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="loadPage()">
+          <th scope="col" pfaSortBy="id"><span pfaTranslate="global.field.id">ID</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" pfaSortBy="questionCode">
+            <span pfaTranslate="preventiveformappApp.questions.questionCode">Question Code</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" pfaSortBy="questionText">
+            <span pfaTranslate="preventiveformappApp.questions.questionText">Question Text</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" pfaSortBy="questionType">
+            <span pfaTranslate="preventiveformappApp.questions.questionType">Question Type</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" pfaSortBy="form.formName">
+            <span pfaTranslate="preventiveformappApp.questions.form">Form</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let questions of questions; trackBy: trackId" data-cy="entityTable">
+          <td>
+            <a [routerLink]="['/questions', questions.id, 'view']">{{ questions.id }}</a>
+          </td>
+          <td>{{ questions.questionCode }}</td>
+          <td>{{ questions.questionText }}</td>
+          <td pfaTranslate="{{ 'preventiveformappApp.QuestionType.' + questions.questionType }}">{{ questions.questionType }}</td>
+          <td>
+            <div *ngIf="questions.form">
+              <a [routerLink]="['/form', questions.form?.id, 'view']">{{ questions.form?.formName }}</a>
+            </div>
+          </td>
+          <td class="text-right">
+            <div class="btn-group">
+              <button
+                type="submit"
+                [routerLink]="['/questions', questions.id, 'view']"
+                class="btn btn-info btn-sm"
+                data-cy="entityDetailsButton"
+              >
+                <fa-icon icon="eye"></fa-icon>
+                <span class="d-none d-md-inline" pfaTranslate="entity.action.view">View</span>
+              </button>
+
+              <button
+                type="submit"
+                [routerLink]="['/questions', questions.id, 'edit']"
+                class="btn btn-primary btn-sm"
+                data-cy="entityEditButton"
+              >
+                <fa-icon icon="pencil-alt"></fa-icon>
+                <span class="d-none d-md-inline" pfaTranslate="entity.action.edit">Edit</span>
+              </button>
+
+              <button type="submit" (click)="delete(questions)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                <fa-icon icon="times"></fa-icon>
+                <span class="d-none d-md-inline" pfaTranslate="entity.action.delete">Delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="questions && questions.length > 0">
+    <div class="row justify-content-center">
+      <pfa-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></pfa-item-count>
+    </div>
+
+    <div class="row justify-content-center">
+      <ngb-pagination
+        [collectionSize]="totalItems"
+        [(page)]="ngbPaginationPage"
+        [pageSize]="itemsPerPage"
+        [maxSize]="5"
+        [rotate]="true"
+        [boundaryLinks]="true"
+        (pageChange)="loadPage($event)"
+      ></ngb-pagination>
+    </div>
+  </div>
+</div>

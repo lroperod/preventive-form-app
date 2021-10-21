@@ -1,0 +1,50 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="questionAnswer">
+      <h2 data-cy="questionAnswerDetailsHeading">
+        <span pfaTranslate="preventiveformappApp.questionAnswer.detail.title">Question Answer</span>
+      </h2>
+
+      <hr />
+
+      <pfa-alert-error></pfa-alert-error>
+
+      <pfa-alert></pfa-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span pfaTranslate="global.field.id">ID</span></dt>
+        <dd>
+          <span>{{ questionAnswer.id }}</span>
+        </dd>
+        <dt><span pfaTranslate="preventiveformappApp.questionAnswer.answerCode">Answer Code</span></dt>
+        <dd>
+          <span>{{ questionAnswer.answerCode }}</span>
+        </dd>
+        <dt><span pfaTranslate="preventiveformappApp.questionAnswer.answerText">Answer Text</span></dt>
+        <dd>
+          <span>{{ questionAnswer.answerText }}</span>
+        </dd>
+        <dt><span pfaTranslate="preventiveformappApp.questionAnswer.questions">Questions</span></dt>
+        <dd>
+          <div *ngIf="questionAnswer.questions">
+            <a [routerLink]="['/questions', questionAnswer.questions?.id, 'view']">{{ questionAnswer.questions?.id }}</a>
+          </div>
+        </dd>
+        <dt><span pfaTranslate="preventiveformappApp.questionAnswer.formAnswer">Form Answer</span></dt>
+        <dd>
+          <div *ngIf="questionAnswer.formAnswer">
+            <a [routerLink]="['/form-answer', questionAnswer.formAnswer?.id, 'view']">{{ questionAnswer.formAnswer?.id }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span pfaTranslate="entity.action.back">Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/question-answer', questionAnswer.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span pfaTranslate="entity.action.edit">Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

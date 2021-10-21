@@ -1,0 +1,50 @@
+{
+  "name": "Questions",
+  "fields": [
+    {
+      "fieldName": "questionCode",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "questionText",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "questionType",
+      "fieldType": "QuestionType",
+      "fieldValues": "TEXT,NUMBER,DATE,UNIQUE_RESPONSE,MULTIPLE_RESPONSE"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "questionOption",
+      "otherEntityRelationshipName": "questions",
+      "relationshipName": "questions"
+    },
+    {
+      "relationshipType": "one-to-one",
+      "otherEntityName": "questionAnswer",
+      "otherEntityRelationshipName": "questions",
+      "relationshipName": "questionAnswer",
+      "ownerSide": false
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "form",
+      "otherEntityRelationshipName": "questions",
+      "relationshipName": "form",
+      "otherEntityField": "formName"
+    }
+  ],
+  "entityTableName": "questions",
+  "dto": "mapstruct",
+  "pagination": "pagination",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": ["preventiveformapp"],
+  "changelogDate": "20211020152639"
+}

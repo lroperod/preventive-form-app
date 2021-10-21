@@ -1,0 +1,107 @@
+<div>
+  <h2 id="page-heading" data-cy="FormAnswerHeading">
+    <span pfaTranslate="preventiveformappApp.formAnswer.home.title">Form Answers</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info mr-2" (click)="loadPage()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span pfaTranslate="preventiveformappApp.formAnswer.home.refreshListLabel">Refresh List</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-form-answer"
+        [routerLink]="['/form-answer/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span pfaTranslate="preventiveformappApp.formAnswer.home.createLabel"> Create a new Form Answer </span>
+      </button>
+    </div>
+  </h2>
+
+  <pfa-alert-error></pfa-alert-error>
+
+  <pfa-alert></pfa-alert>
+
+  <div class="alert alert-warning" id="no-result" *ngIf="formAnswers?.length === 0">
+    <span pfaTranslate="preventiveformappApp.formAnswer.home.notFound">No formAnswers found</span>
+  </div>
+
+  <div class="table-responsive" id="entities" *ngIf="formAnswers && formAnswers.length > 0">
+    <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr pfaSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="loadPage()">
+          <th scope="col" pfaSortBy="id"><span pfaTranslate="global.field.id">ID</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" pfaSortBy="formAnswerLocalDate">
+            <span pfaTranslate="preventiveformappApp.formAnswer.formAnswerLocalDate">Form Answer Local Date</span>
+            <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" pfaSortBy="form.formName">
+            <span pfaTranslate="preventiveformappApp.formAnswer.form">Form</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let formAnswer of formAnswers; trackBy: trackId" data-cy="entityTable">
+          <td>
+            <a [routerLink]="['/form-answer', formAnswer.id, 'view']">{{ formAnswer.id }}</a>
+          </td>
+          <td>{{ formAnswer.formAnswerLocalDate | formatMediumDate }}</td>
+          <td>
+            <div *ngIf="formAnswer.form">
+              <a [routerLink]="['/form', formAnswer.form?.id, 'view']">{{ formAnswer.form?.formName }}</a>
+            </div>
+          </td>
+          <td class="text-right">
+            <div class="btn-group">
+              <button
+                type="submit"
+                [routerLink]="['/form-answer', formAnswer.id, 'view']"
+                class="btn btn-info btn-sm"
+                data-cy="entityDetailsButton"
+              >
+                <fa-icon icon="eye"></fa-icon>
+                <span class="d-none d-md-inline" pfaTranslate="entity.action.view">View</span>
+              </button>
+
+              <button
+                type="submit"
+                [routerLink]="['/form-answer', formAnswer.id, 'edit']"
+                class="btn btn-primary btn-sm"
+                data-cy="entityEditButton"
+              >
+                <fa-icon icon="pencil-alt"></fa-icon>
+                <span class="d-none d-md-inline" pfaTranslate="entity.action.edit">Edit</span>
+              </button>
+
+              <button type="submit" (click)="delete(formAnswer)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                <fa-icon icon="times"></fa-icon>
+                <span class="d-none d-md-inline" pfaTranslate="entity.action.delete">Delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="formAnswers && formAnswers.length > 0">
+    <div class="row justify-content-center">
+      <pfa-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></pfa-item-count>
+    </div>
+
+    <div class="row justify-content-center">
+      <ngb-pagination
+        [collectionSize]="totalItems"
+        [(page)]="ngbPaginationPage"
+        [pageSize]="itemsPerPage"
+        [maxSize]="5"
+        [rotate]="true"
+        [boundaryLinks]="true"
+        (pageChange)="loadPage($event)"
+      ></ngb-pagination>
+    </div>
+  </div>
+</div>

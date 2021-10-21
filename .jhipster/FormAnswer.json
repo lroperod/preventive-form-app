@@ -1,0 +1,42 @@
+{
+  "name": "FormAnswer",
+  "fields": [
+    {
+      "fieldName": "formAnswerLocalDate",
+      "fieldType": "LocalDate"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "questionAnswer",
+      "otherEntityRelationshipName": "formAnswer",
+      "relationshipName": "questionAnswer"
+    },
+    {
+      "relationshipType": "many-to-many",
+      "otherEntityName": "user",
+      "otherEntityRelationshipName": "formAnswer",
+      "relationshipName": "user",
+      "otherEntityField": "login",
+      "ownerSide": true
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "form",
+      "otherEntityRelationshipName": "formAnswer",
+      "relationshipName": "form",
+      "otherEntityField": "formName"
+    }
+  ],
+  "entityTableName": "form_answer",
+  "dto": "mapstruct",
+  "pagination": "pagination",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": ["preventiveformapp"],
+  "changelogDate": "20211020152939"
+}

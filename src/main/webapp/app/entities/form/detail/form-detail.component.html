@@ -1,0 +1,36 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="form">
+      <h2 data-cy="formDetailsHeading"><span pfaTranslate="preventiveformappApp.form.detail.title">Form</span></h2>
+
+      <hr />
+
+      <pfa-alert-error></pfa-alert-error>
+
+      <pfa-alert></pfa-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span pfaTranslate="global.field.id">ID</span></dt>
+        <dd>
+          <span>{{ form.id }}</span>
+        </dd>
+        <dt><span pfaTranslate="preventiveformappApp.form.formName">Form Name</span></dt>
+        <dd>
+          <span>{{ form.formName }}</span>
+        </dd>
+        <dt><span pfaTranslate="preventiveformappApp.form.description">Description</span></dt>
+        <dd>
+          <span>{{ form.description }}</span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span pfaTranslate="entity.action.back">Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/form', form.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span pfaTranslate="entity.action.edit">Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

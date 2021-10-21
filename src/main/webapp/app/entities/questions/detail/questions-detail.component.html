@@ -1,0 +1,46 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="questions">
+      <h2 data-cy="questionsDetailsHeading"><span pfaTranslate="preventiveformappApp.questions.detail.title">Questions</span></h2>
+
+      <hr />
+
+      <pfa-alert-error></pfa-alert-error>
+
+      <pfa-alert></pfa-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span pfaTranslate="global.field.id">ID</span></dt>
+        <dd>
+          <span>{{ questions.id }}</span>
+        </dd>
+        <dt><span pfaTranslate="preventiveformappApp.questions.questionCode">Question Code</span></dt>
+        <dd>
+          <span>{{ questions.questionCode }}</span>
+        </dd>
+        <dt><span pfaTranslate="preventiveformappApp.questions.questionText">Question Text</span></dt>
+        <dd>
+          <span>{{ questions.questionText }}</span>
+        </dd>
+        <dt><span pfaTranslate="preventiveformappApp.questions.questionType">Question Type</span></dt>
+        <dd>
+          <span pfaTranslate="{{ 'preventiveformappApp.QuestionType.' + questions.questionType }}">{{ questions.questionType }}</span>
+        </dd>
+        <dt><span pfaTranslate="preventiveformappApp.questions.form">Form</span></dt>
+        <dd>
+          <div *ngIf="questions.form">
+            <a [routerLink]="['/form', questions.form?.id, 'view']">{{ questions.form?.formName }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span pfaTranslate="entity.action.back">Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/questions', questions.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span pfaTranslate="entity.action.edit">Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

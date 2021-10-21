@@ -1,0 +1,98 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2
+        id="pfa-question-answer-heading"
+        data-cy="QuestionAnswerCreateUpdateHeading"
+        pfaTranslate="preventiveformappApp.questionAnswer.home.createOrEditLabel"
+      >
+        Create or edit a Question Answer
+      </h2>
+
+      <div>
+        <pfa-alert-error></pfa-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" pfaTranslate="global.field.id" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" pfaTranslate="preventiveformappApp.questionAnswer.answerCode" for="field_answerCode"
+            >Answer Code</label
+          >
+          <input
+            type="text"
+            class="form-control"
+            name="answerCode"
+            id="field_answerCode"
+            data-cy="answerCode"
+            formControlName="answerCode"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" pfaTranslate="preventiveformappApp.questionAnswer.answerText" for="field_answerText"
+            >Answer Text</label
+          >
+          <input
+            type="text"
+            class="form-control"
+            name="answerText"
+            id="field_answerText"
+            data-cy="answerText"
+            formControlName="answerText"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" pfaTranslate="preventiveformappApp.questionAnswer.questions" for="field_questions"
+            >Questions</label
+          >
+          <select class="form-control" id="field_questions" data-cy="questions" name="questions" formControlName="questions">
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="questionsOption.id === editForm.get('questions')!.value?.id ? editForm.get('questions')!.value : questionsOption"
+              *ngFor="let questionsOption of questionsCollection; trackBy: trackQuestionsById"
+            >
+              {{ questionsOption.id }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" pfaTranslate="preventiveformappApp.questionAnswer.formAnswer" for="field_formAnswer"
+            >Form Answer</label
+          >
+          <select class="form-control" id="field_formAnswer" data-cy="formAnswer" name="formAnswer" formControlName="formAnswer">
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                formAnswerOption.id === editForm.get('formAnswer')!.value?.id ? editForm.get('formAnswer')!.value : formAnswerOption
+              "
+              *ngFor="let formAnswerOption of formAnswersSharedCollection; trackBy: trackFormAnswerById"
+            >
+              {{ formAnswerOption.id }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span pfaTranslate="entity.action.cancel">Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span pfaTranslate="entity.action.save">Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
