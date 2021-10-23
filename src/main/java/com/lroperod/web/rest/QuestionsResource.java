@@ -157,6 +157,17 @@ public class QuestionsResource {
     }
 
     /**
+     * TODO: Create a getQuestionsByFormId
+     */
+    @GetMapping("/questions/form/{idForm}")
+    public ResponseEntity<List<QuestionsDTO>> getQuestionsByFormId(Pageable pageable, @PathVariable(name = "idForm") Long formId) {
+        // IRA AL SERVICIO A BUSCAR LAS PREGUNTAS POR ID
+
+        QuestionsDTO questiones = new QuestionsDTO();
+        return null;
+    }
+
+    /**
      * {@code GET  /questions/:id} : get the "id" questions.
      *
      * @param id the id of the questionsDTO to retrieve.
