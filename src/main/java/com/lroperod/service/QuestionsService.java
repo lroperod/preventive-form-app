@@ -1,20 +1,21 @@
 package com.lroperod.service;
 
-import com.lroperod.domain.Questions;
-import com.lroperod.repository.QuestionsRepository;
-import com.lroperod.service.dto.QuestionsDTO;
-import com.lroperod.service.mapper.QuestionsMapper;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.lroperod.domain.Questions;
+import com.lroperod.repository.QuestionsRepository;
+import com.lroperod.service.dto.QuestionsDTO;
+import com.lroperod.service.mapper.QuestionsMapper;
 
 /**
  * Service Implementation for managing {@link Questions}.
@@ -80,23 +81,23 @@ public class QuestionsService {
     }
 
     /**
-     * TODO:
-     * Find by form Id.
+     * Gets all questions of a form
+     * @param formId Form id
+     * @param pageable Page request
+     * @return Questions
      */
     @Transactional(readOnly = true)
     public Page<QuestionsDTO> findAllByFormId(Long formId,Pageable pageable) {
-        log.debug("Request to get all Questions on a form");
         return questionsRepository.findAllByFormId(formId,pageable).map(questionsMapper::toDto);
     }
+
     /**
      *  Get all the questions where QuestionAnswer is {@code null}.
      *  @return the list of entities.
      */
     @Transactional(readOnly = true)
     public List<QuestionsDTO> findAllWhereQuestionAnswerIsNull() {
-        log.debug("Request to get all questions where QuestionAnswer is null");
-        return StreamSupport
-            .stream(questionsRepository.findAll().spliterator(), false)
+        return questionsRepository.findAll().stream()
             .filter(questions -> questions.getQuestionAnswer() == null)
             .map(questionsMapper::toDto)
             .collect(Collectors.toCollection(LinkedList::new));
