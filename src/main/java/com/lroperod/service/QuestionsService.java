@@ -83,7 +83,11 @@ public class QuestionsService {
      * TODO:
      * Find by form Id.
      */
-
+    @Transactional(readOnly = true)
+    public Page<QuestionsDTO> findAllByFormId(Long formId,Pageable pageable) {
+        log.debug("Request to get all Questions on a form");
+        return questionsRepository.findAllByFormId(formId,pageable).map(questionsMapper::toDto);
+    }
     /**
      *  Get all the questions where QuestionAnswer is {@code null}.
      *  @return the list of entities.

@@ -162,9 +162,12 @@ public class QuestionsResource {
     @GetMapping("/questions/form/{idForm}")
     public ResponseEntity<List<QuestionsDTO>> getQuestionsByFormId(Pageable pageable, @PathVariable(name = "idForm") Long formId) {
         // IRA AL SERVICIO A BUSCAR LAS PREGUNTAS POR ID
+        log.debug("REST request to get a page of Questions from a form");
+        Page<QuestionsDTO> page = questionsService.findAllByFormId(formId,pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
 
-        QuestionsDTO questiones = new QuestionsDTO();
-        return null;
+        //QuestionsDTO questiones = new QuestionsDTO();
     }
 
     /**
