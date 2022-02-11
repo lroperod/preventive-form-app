@@ -1,9 +1,16 @@
 package com.lroperod.service;
 
+import com.lroperod.domain.FormAnswer;
 import com.lroperod.domain.QuestionAnswer;
+import com.lroperod.repository.FormAnswerRepository;
 import com.lroperod.repository.QuestionAnswerRepository;
+import com.lroperod.service.dto.FormAnswerDTO;
 import com.lroperod.service.dto.QuestionAnswerDTO;
+import com.lroperod.service.dto.QuestionsDTO;
 import com.lroperod.service.mapper.QuestionAnswerMapper;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,6 +70,16 @@ public class QuestionAnswerService {
             .map(questionAnswerMapper::toDto);
     }
 
+    /**
+     * TODO: Create a method to save form's answer
+     */
+/*
+    public List<QuestionAnswerDTO> saveAnswerForm(List<QuestionAnswerDTO> questionAnswerDTO){
+
+        //QuestionAnswerDTO questionAnswerDTO = questionAnswerMapper.toEntity(questionAnswerDTO);
+        questionAnswer = questionAnswerRepository.saveAll(questionAnswer);
+        return questionAnswerMapper.toDto(questionAnswer);
+    }*/
     /**
      * Get all the questionAnswers.
      *

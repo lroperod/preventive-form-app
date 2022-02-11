@@ -2,10 +2,12 @@ package com.lroperod.web.rest;
 
 import com.lroperod.repository.QuestionAnswerRepository;
 import com.lroperod.service.QuestionAnswerService;
+import com.lroperod.service.dto.FormAnswerDTO;
 import com.lroperod.service.dto.QuestionAnswerDTO;
 import com.lroperod.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -67,6 +69,25 @@ public class QuestionAnswerResource {
             .body(result);
     }
 
+    /**
+     * TODO: LLamo al servicio para guardar las respuestas de un formulario
+     */
+    /*
+    @PostMapping("/question-answers/form")
+    public ResponseEntity<List<QuestionAnswerDTO>> saveAnswerForm(@RequestBody QuestionAnswerDTO questionAnswerDTO)
+        throws URISyntaxException {
+        log.debug("REST request to save QuestionAnswer : {}", questionAnswerDTO);
+        if (questionAnswerDTO.getId() != null) {
+            throw new BadRequestAlertException("A new questionAnswer cannot already have an ID", ENTITY_NAME, "idexists");
+        }
+
+        QuestionAnswerDTO result = questionAnswerService.saveAll(questionAnswerDTO);
+        return ResponseEntity
+            .created(new URI("/api/question-answers/" + result.getId()))
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
+            .body(result);
+    }
+*/
     /**
      * {@code PUT  /question-answers/:id} : Updates an existing questionAnswer.
      *

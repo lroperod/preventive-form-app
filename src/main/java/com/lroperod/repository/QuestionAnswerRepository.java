@@ -1,5 +1,8 @@
 package com.lroperod.repository;
 
+import java.util.List;
+
+import com.lroperod.domain.FormAnswer;
 import com.lroperod.domain.QuestionAnswer;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
@@ -9,4 +12,11 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface QuestionAnswerRepository extends JpaRepository<QuestionAnswer, Long> {}
+public interface QuestionAnswerRepository extends JpaRepository<QuestionAnswer, Long> {
+    /**
+     *
+     * TODO: Create a method to save form's answer
+     */
+    List<QuestionAnswer> saveAnswerForm(QuestionAnswer questionAnswer);
+
+}
