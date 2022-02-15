@@ -13,10 +13,6 @@ import org.springframework.stereotype.Repository;
 @SuppressWarnings("unused")
 @Repository
 public interface QuestionAnswerRepository extends JpaRepository<QuestionAnswer, Long> {
-    /**
-     *
-     * TODO: Create a method to save form's answer
-     */
-    List<QuestionAnswer> saveAnswerForm(QuestionAnswer questionAnswer);
+
 
 }

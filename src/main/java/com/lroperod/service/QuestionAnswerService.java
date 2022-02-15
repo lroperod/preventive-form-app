@@ -73,13 +73,20 @@ public class QuestionAnswerService {
     /**
      * TODO: Create a method to save form's answer
      */
-/*
-    public List<QuestionAnswerDTO> saveAnswerForm(List<QuestionAnswerDTO> questionAnswerDTO){
 
-        //QuestionAnswerDTO questionAnswerDTO = questionAnswerMapper.toEntity(questionAnswerDTO);
-        questionAnswer = questionAnswerRepository.saveAll(questionAnswer);
-        return questionAnswerMapper.toDto(questionAnswer);
-    }*/
+    public List<QuestionAnswerDTO> saveAnswerForm(List<QuestionAnswerDTO> responseList){
+        //Get the object
+
+        //Save in BBDD
+
+        //Return the result
+        List<QuestionAnswerDTO> savedAnswerList = new ArrayList<>();
+        for(QuestionAnswerDTO response: responseList){
+            QuestionAnswerDTO savedResponse = this.save(response);
+            savedAnswerList.add(savedResponse);
+        }
+        return savedAnswerList;
+    }
     /**
      * Get all the questionAnswers.
      *

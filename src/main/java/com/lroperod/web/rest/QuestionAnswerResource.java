@@ -72,22 +72,15 @@ public class QuestionAnswerResource {
     /**
      * TODO: LLamo al servicio para guardar las respuestas de un formulario
      */
-    /*
-    @PostMapping("/question-answers/form")
-    public ResponseEntity<List<QuestionAnswerDTO>> saveAnswerForm(@RequestBody QuestionAnswerDTO questionAnswerDTO)
-        throws URISyntaxException {
-        log.debug("REST request to save QuestionAnswer : {}", questionAnswerDTO);
-        if (questionAnswerDTO.getId() != null) {
-            throw new BadRequestAlertException("A new questionAnswer cannot already have an ID", ENTITY_NAME, "idexists");
-        }
 
-        QuestionAnswerDTO result = questionAnswerService.saveAll(questionAnswerDTO);
-        return ResponseEntity
-            .created(new URI("/api/question-answers/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
-            .body(result);
+    @PostMapping("/question-answers/form")
+    public ResponseEntity<List<QuestionAnswerDTO>> saveAnswerForm(@RequestBody List<QuestionAnswerDTO> questionAnswerDTO){
+        log.debug("REST request to save QuestionAnswer : {}", questionAnswerDTO);
+        List<QuestionAnswerDTO> responseList= questionAnswerService.saveAnswerForm(questionAnswerDTO);
+
+        return ResponseEntity.ok(responseList);
     }
-*/
+
     /**
      * {@code PUT  /question-answers/:id} : Updates an existing questionAnswer.
      *
